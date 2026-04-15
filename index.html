@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sino-Africa Youth Foundation | Persistent Admin System</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9fafc;
+            color: #1e293b;
+            line-height: 1.5;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+        body.dark-mode { background: #0f172a; color: #e2e8f0; }
+        body.dark-mode .feature-card, body.dark-mode .contact-block, body.dark-mode .modal-content,
+        body.dark-mode .course-card, body.dark-mode .document-card, body.dark-mode .news-card,
+        body.dark-mode .teacher-card, body.dark-mode .sidebar { background: #1e293b; border-color: #334155; }
+        body.dark-mode input, body.dark-mode textarea { background: #334155; color: white; border-color: #475569; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .search-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 28px;
+            padding: 3px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .search-container { background: #1e293b; }
+        .search-container input {
+            border: none;
+            padding: 4px 6px;
+            border-radius: 28px;
+            width: 120px;
+            background: transparent;
+            outline: none;
+            font-size: 0.7rem;
+        }
+        .search-container button {
+            background: #d4af37;
+            color: #1e293b;
+            padding: 2px 8px;
+            border-radius: 28px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .admin-trigger-btn {
+            background: #1e3c2c;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 28px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        .admin-trigger-btn:hover { transform: scale(1.02); }
+        body.dark-mode .admin-trigger-btn { background: #d4af37; color: #1e293b; }
+        .logout-btn { background: #64748b; }
+        
+        .hamburger-btn {
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
+            background: #1e3c2c; border: none; font-size: 1.2rem; cursor: pointer;
+            color: white; width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .hamburger-btn { background: #d4af37; color: #1e293b; }
+        
+        .sidebar {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: white; box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            z-index: 1000; transition: left 0.3s ease; padding: 80px 20px 30px; overflow-y: auto;
+        }
+        .sidebar.open { left: 0; }
+        .sidebar .close-sidebar { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.3rem; cursor: pointer; }
+        .sidebar a { display: block; padding: 12px 15px; margin: 5px 0; text-decoration: none; color: #1e293b; font-weight: 500; border-radius: 12px; cursor: pointer; }
+        body.dark-mode .sidebar a { color: #e2e8f0; }
+        .sidebar a:hover, .sidebar a.active { background: #d4af37; color: #1e293b; }
+        
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            min-height: 500px;
+            overflow: hidden;
+            background: #0a1c14;
+        }
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.6s ease-in-out, opacity 0.4s ease-in-out;
+            z-index: 1;
+        }
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 2;
+        }
+        .slide.exit-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .slide.enter-left {
+            transform: translateX(-100%);
+        }
+        .slide-overlay {
+            background: rgba(0,0,0,0.5);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .slide-overlay h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .slide-overlay p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .slide-caption {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            padding: 12px;
+            font-size: 1rem;
+            z-index: 3;
+            font-weight: 500;
+            font-style: italic;
+        }
+        
+        .section-title { font-size: 1.8rem; font-weight: 700; margin: 48px 0 24px 0; border-left: 5px solid #d4af37; padding-left: 20px; }
+        .features-grid, .courses-grid, .documents-grid, .news-grid, .teachers-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin: 30px 0;
+        }
+        .feature-card, .course-card, .document-card, .news-card, .teacher-card {
+            background: white; border-radius: 24px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0; position: relative;
+            transition: all 0.2s ease;
+        }
+        .feature-card i { font-size: 2rem; color: #d4af37; margin-bottom: 15px; }
+        .teacher-media img, .teacher-media video { width: 100%; max-height: 180px; object-fit: cover; border-radius: 12px; }
+        .download-link, .file-link { display: inline-block; margin-top: 10px; color: #d4af37; text-decoration: none; font-weight: 600; }
+        .news-header { display: flex; justify-content: space-between; align-items: center; }
+        .seven-star { width: 28px; height: 28px; animation: blinkRed 0.8s step-start infinite; }
+        @keyframes blinkRed { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .admin-actions { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+        button { background: #1e3c2c; color: white; border: none; padding: 10px 18px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .delete-btn { background: #b91c1c; margin-top: 10px; }
+        .edit-btn { background: #d4af37; color: #1e293b; margin-top: 10px; margin-right: 8px; }
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); justify-content: center;
+            align-items: center; z-index: 1100;
+        }
+        .modal-content { background: white; max-width: 600px; width: 90%; border-radius: 32px; padding: 32px; max-height: 85vh; overflow-y: auto; }
+        .input-group { margin: 18px 0; }
+        .input-group label { font-weight: 600; display: block; margin-bottom: 6px; }
+        input, textarea, select { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 28px; font-family: inherit; }
+        .file-upload-area { border: 2px dashed #d4af37; border-radius: 20px; padding: 20px; text-align: center; margin: 15px 0; }
+        .page-content { display: none; }
+        .page-content.active-page { display: block; }
+        .contact-block { background: #eef2ff; border-radius: 32px; padding: 32px; margin: 48px 0; }
+        footer { background: #0f172a; color: #cbd5e1; padding: 32px 0; text-align: center; margin-top: 64px; }
+        .search-highlight { background-color: yellow; color: black; }
+        body.dark-mode .search-highlight { background-color: #d4af37; color: #1e293b; }
+        .no-slider-message {
+            display: flex; align-items: center; justify-content: center; height: 100%;
+            background: linear-gradient(135deg, #1e3c2c, #0a1c14); color: white;
+            text-align: center; flex-direction: column; gap: 20px;
+        }
+        .toast-notification {
+            position: fixed; bottom: 30px; right: 30px; background: #1e3c2c; color: white;
+            padding: 10px 20px; border-radius: 40px; z-index: 1200; animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 0.85rem;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .user-status {
+            position: fixed;
+            top: 20px;
+            right: 195px;
+            z-index: 1002;
+            background: rgba(0,0,0,0.6);
+            padding: 2px 8px;
+            border-radius: 28px;
+            font-size: 0.65rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .admin-badge-small {
+            background: #d4af37;
+            color: #1e293b;
+            padding: 2px 6px;
+            border-radius: 28px;
+            font-size: 0.6rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
+        <button id="searchBtn"><i class="fas fa-search"></i></button>
+    </div>
+    <button class="admin-trigger-btn" id="adminPortalBtn"><i class="fas fa-user-shield"></i> Admin</button>
+</div>
+
+<div class="user-status" id="userStatus"></div>
+<button class="hamburger-btn" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+
+<div class="sidebar" id="sidebar">
+    <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+    <a class="nav-tab" data-tab="home"><i class="fas fa-home"></i> Home</a>
+    <a class="nav-tab" data-tab="courses"><i class="fas fa-graduation-cap"></i> Courses</a>
+    <a class="nav-tab" data-tab="documents"><i class="fas fa-folder-open"></i> Documents</a>
+    <a class="nav-tab" data-tab="news"><i class="fas fa-newspaper"></i> News</a>
+    <a class="nav-tab" data-tab="teachers"><i class="fas fa-chalkboard-user"></i> Teacher Works</a>
+    <a class="nav-tab" data-tab="about"><i class="fas fa-info-circle"></i> About Us</a>
+</div>
+
+<main>
+    <div id="home-page" class="page-content active-page">
+        <div class="hero" id="heroSlider">
+            <div class="slider-container" id="sliderContainer"></div>
+        </div>
+        <div class="container">
+            <div class="section-title"><i class="fas fa-star-of-life"></i> Core Features</div>
+            <div class="features-grid" id="featuresGrid"></div>
+        </div>
+    </div>
+    <div id="courses-page" class="page-content"><div class="container"><div class="section-title"><i class="fas fa-graduation-cap"></i> Our Courses</div><div id="coursesContainer" class="courses-grid"></div></div></div>
+    <div id="documents-page" class="page-content"><div class="container"><div class="section-title"><i class="fas fa-folder-open"></i> Official Documents</div><div id="documentsContainer" class="documents-grid"></div></div></div>
+    <div id="news-page" class="page-content"><div class="container"><div class="section-title"><i class="fas fa-newspaper"></i> Latest News</div><div id="newsContainer" class="news-grid"></div></div></div>
+    <div id="teachers-page" class="page-content"><div class="container"><div class="section-title"><i class="fas fa-chalkboard-user"></i> Teacher Resources</div><div id="teachersContainer" class="teachers-grid"></div></div></div>
+    <div id="about-page" class="page-content"><div class="container"><div class="section-title"><i class="fas fa-info-circle"></i> About Us</div><div id="aboutContent" style="background: #eef2ff; border-radius: 28px; padding: 32px; margin: 20px 0;"></div><div class="contact-block"><h3><i class="fas fa-map-pin"></i> Contact Information</h3><div id="contactDetails"></div></div></div></div>
+</main>
+
+<footer><div class="container"><p>© 2026 Sino-Africa Youth Foundation — P.O.BOX 3718, Zanzibar, Tanzania | Persistent Admin System</p></div></footer>
+
+<div id="adminModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-lock"></i> Admin Login</h3>
+        <p style="margin-bottom: 15px;">Enter your credentials to access the admin panel</p>
+        <div class="input-group"><label>Email</label><input type="email" id="adminEmail" placeholder="admin@say.ngo" autocomplete="off"></div>
+        <div class="input-group"><label>Password</label><input type="password" id="adminPassword" placeholder="Enter password"></div>
+        <button id="adminLoginBtn" style="width:100%; margin-bottom:10px;">Login</button>
+        <button id="cancelAdminBtn" class="btn-secondary" style="width:100%; background:#64748b;">Cancel</button>
+        <div id="adminLoginError" class="error-msg" style="margin-top:10px;"></div>
+    </div>
+</div>
+
+<div id="editorModal" class="modal"><div class="modal-content" id="editorModalContent"></div></div>
+
+<script>
+    // ============================================
+    // PERSISTENT ADMIN SYSTEM - YOUR SLIDE IS INCLUDED BELOW
+    // ============================================
+    const ADMIN_EMAIL = "ameral320@gmail.com";
+    const ADMIN_PASSWORD = "26372637";
+    let isAdminLoggedIn = false;
+    let currentSlideIndex = 0;
+    let slideInterval;
+    let currentSearchTerm = "";
+    let isTransitioning = false;
+
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.style.background = isError ? '#b91c1c' : '#1e3c2c';
+        toast.innerHTML = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Load data from localStorage - PERSISTENT STORAGE
+    function loadData() {
+        const saved = localStorage.getItem("saf_persistent_data_v5");
+        if (saved) {
+            foundationData = JSON.parse(saved);
+            showToast("📂 Admin changes loaded from storage");
+        } else {
+            saveData();
+        }
+    }
+    
+    function saveData() { 
+        localStorage.setItem("saf_persistent_data_v5", JSON.stringify(foundationData));
+    }
+    
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Complete Data Structure - YOUR SLIDE IS HERE
+    let foundationData = {
+        heroTitle: "Sino-Africa Youth Foundation",
+        heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
+        sliderImages: [
+            { 
+                id: "s1", 
+                url: "https://kommodo.ai/i/6dNWVjA0S6WIpwxaqMB0", 
+                caption: "SAY seed teachers are working in team" 
+            }
+        ],
+        features: [
+            { id: "f1", icon: "fa-gamepad", title: "Gamified Learning", desc: "Earn badges and certificates as you complete courses." },
+            { id: "f2", icon: "fa-calendar-alt", title: "Events & Workshops", desc: "Regular cultural exchanges and leadership camps." },
+            { id: "f3", icon: "fa-robot", title: "AI Career Assistant", desc: "24/7 guidance for job and scholarship applications." }
+        ],
+        courses: [
+            { id: "c1", title: "CHINESE LANGUAGE FOR BEGINNERS", description: "Learn Chinese to secure Sino-African opportunities.", media: "" },
+            { id: "c2", title: "AI FOUNDATION", description: "AI experts training tomorrow's leaders.", media: "" }
+        ],
+        documents: [
+            { id: "d1", title: "Annual Report 2025", description: "Full report on foundation activities.", fileUrl: "#", fileData: "" }
+        ],
+        news: [
+            { id: "n1", title: "New Partnership with UNESCO", content: "Global education initiative launched.", media: "", date: "2026-03-15" },
+            { id: "n2", title: "Scholarship Applications Open", content: "Apply now for the 2026 cohort.", media: "", date: "2026-04-01" }
+        ],
+        teacherWorks: [
+            { id: "t1", title: "Introduction to AI", type: "video", content: "https://www.w3schools.com/html/mov_bbb.mp4", caption: "Watch this AI lecture", fileData: "" },
+            { id: "t2", title: "Chinese Basics Guide", type: "document", content: "", caption: "Download beginner's guide", fileData: "" },
+            { id: "t3", title: "Useful Learning Resources", type: "link", content: "https://www.example.com", caption: "External learning platform", fileData: "" }
+        ],
+        aboutText: "Sino-Africa Youth Foundation is a non-profit organization dedicated to fostering youth development, cultural exchange, and sustainable cooperation between China and African nations.",
+        contact: {
+            addressLine1: "P.O.BOX 3718, Shangani",
+            addressLine2: "Office : SH/UZ/163/J, Tomondo, Western Region",
+            addressLine3: "Zanzibar, Tanzania",
+            website: "https://www.say.ngo",
+            email: "volunteer@say.ngo",
+            phone: "+255318389"
+        }
+    };
+
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+    function highlightText(text) { if (!currentSearchTerm) return escapeHtml(text); const regex = new RegExp(`(${escapeRegex(currentSearchTerm)})`, 'gi'); return escapeHtml(text).replace(regex, '<span class="search-highlight">$1</span>'); }
+    function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function getSevenStarSVG() { return `<svg class="seven-star" viewBox="0 0 100 100" fill="red"><polygon points="50,5 61,35 95,35 68,53 79,85 50,67 21,85 32,53 5,35 39,35" fill="red" stroke="darkred" stroke-width="2"/></svg>`; }
+
+    function renderHeroSlider() {
+        const container = document.getElementById('sliderContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        
+        if (foundationData.sliderImages.length === 0) {
+            container.innerHTML = `<div class="no-slider-message"><h2>📸 No Slides Yet</h2><p>Click "Admin" → Login → "Add New Slide"</p></div>`;
+            return;
+        }
+        
+        foundationData.sliderImages.forEach((img, idx) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            if (idx === 0) slide.classList.add('active');
+            slide.style.backgroundImage = `url('${img.url}')`;
+            slide.innerHTML = `
+                <div class="slide-overlay">
+                    <h1>${escapeHtml(foundationData.heroTitle)}</h1>
+                    <p>${escapeHtml(foundationData.heroDesc)}</p>
+                </div>
+                <div class="slide-caption"><i>${escapeHtml(img.caption)}</i></div>
+                ${isAdminLoggedIn ? `<div style="position:absolute; top:20px; right:20px; z-index:15; display:flex; gap:8px;">
+                    <button onclick="openEditSlide('${img.id}')" style="background:#d4af37;color:#1e293b; padding:6px 14px; font-size:0.8rem;">✏️ Edit</button> 
+                    <button onclick="deleteSlide('${img.id}')" style="background:#b91c1c; padding:6px 14px; font-size:0.8rem;">🗑️ Delete</button>
+                </div>` : ''}
+            `;
+            container.appendChild(slide);
+        });
+        
+        startSlider();
+    }
+    
+    function startSlider() {
+        if (slideInterval) clearInterval(slideInterval);
+        if (foundationData.sliderImages.length <= 1) return;
+        
+        slideInterval = setInterval(() => {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            const slides = document.querySelectorAll('.slide');
+            if (slides.length === 0) return;
+            
+            const currentSlide = slides[currentSlideIndex];
+            currentSlide.classList.add('exit-right');
+            currentSlide.classList.remove('active');
+            
+            const nextIndex = (currentSlideIndex + 1) % slides.length;
+            const nextSlide = slides[nextIndex];
+            nextSlide.classList.add('enter-left');
+            
+            setTimeout(() => {
+                nextSlide.classList.remove('enter-left');
+                nextSlide.classList.add('active');
+                currentSlide.classList.remove('exit-right');
+                isTransitioning = false;
+                currentSlideIndex = nextIndex;
+            }, 600);
+        }, 6000);
+    }
+    
+    function deleteSlide(id) { 
+        if (confirm("⚠️ Delete this slide?")) {
+            foundationData.sliderImages = foundationData.sliderImages.filter(i => i.id !== id); 
+            if (currentSlideIndex >= foundationData.sliderImages.length) currentSlideIndex = 0;
+            renderHeroSlider(); 
+            saveData();
+            showToast("🗑️ Slide deleted - Changes saved permanently");
+        }
+    }
+    
+    function openEditSlide(id) { 
+        const img = foundationData.sliderImages.find(i => i.id === id); 
+        showModal(`<h3>✏️ Edit Slide</h3><div class="input-group"><label>Image URL</label><input id="editUrl" value="${escapeHtml(img.url)}"></div><div class="input-group"><label>Caption (Italic)</label><input id="editCaption" value="${escapeHtml(img.caption)}"></div><div class="file-upload-area"><label>📁 Upload New Image: <input type="file" id="uploadImg" accept="image/*"></label></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => { 
+            const file = document.getElementById('uploadImg').files[0]; 
+            if (file) img.url = await fileToBase64(file); 
+            else if (document.getElementById('editUrl').value) img.url = document.getElementById('editUrl').value;
+            img.caption = document.getElementById('editCaption').value; 
+            renderHeroSlider(); 
+            saveData(); 
+            closeModal();
+            showToast("✨ Slide updated - Changes saved");
+        }); 
+    }
+    
+    async function addNewSlide() { 
+        showModal(`<h3>➕ Add New Slide</h3><div class="input-group"><label>Image URL (optional)</label><input id="newUrl" placeholder="https://..."></div><div class="input-group"><label>Caption (Italic)</label><input id="newCaption" placeholder="Caption for this slide"></div><div class="file-upload-area"><label>📁 Upload Image: <input type="file" id="uploadImg" accept="image/*"></label></div><button id="saveBtn">Add to Slider</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => { 
+            const file = document.getElementById('uploadImg').files[0]; 
+            let url = document.getElementById('newUrl').value; 
+            if (file) url = await fileToBase64(file); 
+            if (!url) { alert("Please provide an image URL or upload a file"); return; } 
+            foundationData.sliderImages.push({ id: "s"+Date.now(), url: url, caption: document.getElementById('newCaption').value || "New Slide" }); 
+            renderHeroSlider(); 
+            saveData(); 
+            closeModal();
+            showToast("🖼️ New slide added - Changes saved permanently");
+        }); 
+    }
+
+    function renderWebsite() {
+        renderHeroSlider();
+        
+        document.getElementById('featuresGrid').innerHTML = foundationData.features.map(f => `
+            <div class="feature-card"><i class="fas ${f.icon}"></i><h3>${highlightText(f.title)}</h3><p>${highlightText(f.desc)}</p>
+            ${isAdminLoggedIn ? `<div><button class="edit-btn" onclick="openEditFeature('${f.id}')">Edit</button><button class="delete-btn" onclick="deleteItem('features','${f.id}')">Delete</button></div>` : ''}</div>`).join('');
+        
+        document.getElementById('coursesContainer').innerHTML = foundationData.courses.map(c => `
+            <div class="course-card"><h3>${highlightText(c.title)}</h3><p>${highlightText(c.description)}</p>
+            ${isAdminLoggedIn ? `<div><button class="edit-btn" onclick="openEditCourse('${c.id}')">Edit</button><button class="delete-btn" onclick="deleteItem('courses','${c.id}')">Delete</button></div>` : ''}</div>`).join('');
+        
+        document.getElementById('documentsContainer').innerHTML = foundationData.documents.map(d => `
+            <div class="document-card"><h3><i class="fas fa-file-pdf"></i> ${highlightText(d.title)}</h3><p>${highlightText(d.description)}</p>
+            ${d.fileData && d.fileData !== '#' ? `<a class="download-link" href="${d.fileData}" download="${d.title.replace(/[^a-z0-9]/gi, '_')}" target="_blank"><i class="fas fa-download"></i> Download</a>` : d.fileUrl !== '#' ? `<a class="download-link" href="${d.fileUrl}" target="_blank"><i class="fas fa-external-link-alt"></i> View</a>` : '<span style="color:#888;">No file</span>'}
+            ${isAdminLoggedIn ? `<div><button class="edit-btn" onclick="openEditDocument('${d.id}')">Edit</button><button class="delete-btn" onclick="deleteItem('documents','${d.id}')">Delete</button></div>` : ''}</div>`).join('');
+        
+        document.getElementById('newsContainer').innerHTML = foundationData.news.map(n => `
+            <div class="news-card"><div class="news-header"><h3>${highlightText(n.title)}</h3>${getSevenStarSVG()}</div><small>${n.date}</small><p>${highlightText(n.content)}</p>
+            ${isAdminLoggedIn ? `<div><button class="edit-btn" onclick="openEditNews('${n.id}')">Edit</button><button class="delete-btn" onclick="deleteItem('news','${n.id}')">Delete</button></div>` : ''}</div>`).join('');
+        
+        document.getElementById('teachersContainer').innerHTML = foundationData.teacherWorks.map(item => {
+            let mediaHtml = '';
+            if (item.type === 'image' && item.content) mediaHtml = `<div class="teacher-media"><img src="${item.content}" style="width:100%; border-radius:12px;"></div>`;
+            else if (item.type === 'video' && item.content) mediaHtml = `<div class="teacher-media"><video controls src="${item.content}" style="width:100%; border-radius:12px;"></video></div>`;
+            else if (item.type === 'document') mediaHtml = `<a class="download-link" href="${item.fileData || item.content}" download="${item.title.replace(/[^a-z0-9]/gi, '_')}.pdf" target="_blank"><i class="fas fa-download"></i> Download</a>`;
+            else if (item.type === 'link' && item.content) mediaHtml = `<a class="file-link" href="${item.content}" target="_blank"><i class="fas fa-external-link-alt"></i> Open Link</a>`;
+            return `<div class="teacher-card"><h3>📚 ${highlightText(item.title)}</h3><p><strong>${item.type}</strong></p><p>${highlightText(item.caption)}</p>${mediaHtml}${isAdminLoggedIn ? `<div><button class="edit-btn" onclick="openEditTeacher('${item.id}')">Edit</button><button class="delete-btn" onclick="deleteItem('teacherWorks','${item.id}')">Delete</button></div>` : ''}</div>`;
+        }).join('');
+        
+        document.getElementById('aboutContent').innerHTML = `<p>${highlightText(foundationData.aboutText)}</p>${isAdminLoggedIn ? `<button class="edit-btn" style="margin-top:15px;" onclick="openEditAbout()">Edit About</button>` : ''}`;
+        document.getElementById('contactDetails').innerHTML = `<p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(foundationData.contact.addressLine1)}<br>${escapeHtml(foundationData.contact.addressLine2)}<br>${escapeHtml(foundationData.contact.addressLine3)}</p><p><i class="fas fa-globe"></i> <a href="${foundationData.contact.website}" target="_blank">${foundationData.contact.website}</a></p><p><i class="fas fa-envelope"></i> <a href="mailto:${foundationData.contact.email}">${foundationData.contact.email}</a></p><p><i class="fas fa-phone-alt"></i> ${foundationData.contact.phone}</p>${isAdminLoggedIn ? `<button class="edit-btn" style="margin-top:15px;" onclick="openEditContact()">Edit Contact</button>` : ''}`;
+        
+        if (isAdminLoggedIn) addAdminButtons(); else removeAdminButtons();
+        saveData();
+    }
+
+    function openEditFeature(id) { const item = foundationData.features.find(i => i.id === id); showModal(`<h3>Edit Feature</h3><div class="input-group"><label>Icon</label><input id="editIcon" value="${item.icon}"></div><div class="input-group"><label>Title</label><input id="editTitle" value="${escapeHtml(item.title)}"></div><div class="input-group"><label>Description</label><textarea id="editDesc">${escapeHtml(item.desc)}</textarea></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { item.icon = document.getElementById('editIcon').value; item.title = document.getElementById('editTitle').value; item.desc = document.getElementById('editDesc').value; renderWebsite(); closeModal(); showToast("✨ Feature updated - Saved"); }); }
+    function openEditCourse(id) { const item = foundationData.courses.find(i => i.id === id); showModal(`<h3>Edit Course</h3><div class="input-group"><label>Title</label><input id="editTitle" value="${escapeHtml(item.title)}"></div><div class="input-group"><label>Description</label><textarea id="editDesc">${escapeHtml(item.description)}</textarea></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { item.title = document.getElementById('editTitle').value; item.description = document.getElementById('editDesc').value; renderWebsite(); closeModal(); showToast("📚 Course updated - Saved"); }); }
+    function openEditDocument(id) { const item = foundationData.documents.find(i => i.id === id); showModal(`<h3>Edit Document</h3><div class="input-group"><label>Title</label><input id="editTitle" value="${escapeHtml(item.title)}"></div><div class="input-group"><label>Description</label><textarea id="editDesc">${escapeHtml(item.description)}</textarea></div><div class="file-upload-area"><label>Replace File: <input type="file" id="uploadFile" accept=".pdf,.doc,.docx,.txt,.xlsx"></label></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => { const file = document.getElementById('uploadFile').files[0]; if (file) item.fileData = await fileToBase64(file); item.title = document.getElementById('editTitle').value; item.description = document.getElementById('editDesc').value; renderWebsite(); closeModal(); showToast("📄 Document updated - Saved"); }); }
+    function openEditNews(id) { const item = foundationData.news.find(i => i.id === id); showModal(`<h3>Edit News</h3><div class="input-group"><label>Title</label><input id="editTitle" value="${escapeHtml(item.title)}"></div><div class="input-group"><label>Content</label><textarea id="editContent">${escapeHtml(item.content)}</textarea></div><div class="input-group"><label>Date</label><input type="date" id="editDate" value="${item.date}"></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { item.title = document.getElementById('editTitle').value; item.content = document.getElementById('editContent').value; item.date = document.getElementById('editDate').value; renderWebsite(); closeModal(); showToast("📰 News updated - Saved"); }); }
+    function openEditTeacher(id) { const item = foundationData.teacherWorks.find(i => i.id === id); showModal(`<h3>Edit Resource</h3><div class="input-group"><label>Title</label><input id="editTitle" value="${escapeHtml(item.title)}"></div><div class="input-group"><label>Type</label><select id="editType"><option ${item.type==='video'?'selected':''}>video</option><option ${item.type==='document'?'selected':''}>document</option><option ${item.type==='link'?'selected':''}>link</option><option ${item.type==='image'?'selected':''}>image</option></select></div><div class="input-group"><label>URL</label><input id="editContent" value="${escapeHtml(item.content)}"></div><div class="input-group"><label>Caption</label><input id="editCaption" value="${escapeHtml(item.caption)}"></div><div class="file-upload-area"><label>Upload File: <input type="file" id="uploadFile" accept="image/*,video/*,application/pdf"></label></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => { const file = document.getElementById('uploadFile').files[0]; if (file) { item.fileData = await fileToBase64(file); item.content = item.fileData; } else { item.content = document.getElementById('editContent').value; } item.title = document.getElementById('editTitle').value; item.type = document.getElementById('editType').value; item.caption = document.getElementById('editCaption').value; renderWebsite(); closeModal(); showToast("📚 Resource updated - Saved"); }); }
+    function openEditAbout() { showModal(`<h3>Edit About Us</h3><div class="input-group"><label>About Text</label><textarea id="editAbout" rows="6">${escapeHtml(foundationData.aboutText)}</textarea></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.aboutText = document.getElementById('editAbout').value; renderWebsite(); closeModal(); showToast("ℹ️ About updated - Saved"); }); }
+    function openEditContact() { showModal(`<h3>Edit Contact</h3><div class="input-group"><label>Address Line 1</label><input id="editAddr1" value="${escapeHtml(foundationData.contact.addressLine1)}"></div><div class="input-group"><label>Address Line 2</label><input id="editAddr2" value="${escapeHtml(foundationData.contact.addressLine2)}"></div><div class="input-group"><label>Address Line 3</label><input id="editAddr3" value="${escapeHtml(foundationData.contact.addressLine3)}"></div><div class="input-group"><label>Website</label><input id="editWeb" value="${escapeHtml(foundationData.contact.website)}"></div><div class="input-group"><label>Email</label><input id="editEmail" value="${escapeHtml(foundationData.contact.email)}"></div><div class="input-group"><label>Phone</label><input id="editPhone" value="${escapeHtml(foundationData.contact.phone)}"></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.contact.addressLine1 = document.getElementById('editAddr1').value; foundationData.contact.addressLine2 = document.getElementById('editAddr2').value; foundationData.contact.addressLine3 = document.getElementById('editAddr3').value; foundationData.contact.website = document.getElementById('editWeb').value; foundationData.contact.email = document.getElementById('editEmail').value; foundationData.contact.phone = document.getElementById('editPhone').value; renderWebsite(); closeModal(); showToast("📞 Contact updated - Saved"); }); }
+
+    function deleteItem(collection, id) { if (confirm("Delete this item?")) { foundationData[collection] = foundationData[collection].filter(i => i.id !== id); renderWebsite(); showToast("🗑️ Deleted - Changes saved permanently"); } }
+
+    function addAdminButtons() {
+        if (document.getElementById('globalAdminPanel')) return;
+        const container = document.querySelector('.page-content.active-page .container');
+        if (container) {
+            const panel = document.createElement('div'); panel.id = 'globalAdminPanel'; panel.className = 'admin-actions';
+            panel.innerHTML = `<button id="editHeroBtn"><i class="fas fa-edit"></i> Edit Hero</button>
+                <button id="addSlideBtn"><i class="fas fa-plus-circle"></i> + Add New Slide</button>
+                <button id="addFeatureBtn">+ Add Feature</button>
+                <button id="addCourseBtn">+ Add Course</button>
+                <button id="addDocBtn"><i class="fas fa-upload"></i> + Upload Document</button>
+                <button id="addNewsBtn">+ Add News</button>
+                <button id="addTeacherBtn"><i class="fas fa-chalkboard"></i> + Add Resource</button>`;
+            container.insertBefore(panel, container.firstChild);
+            document.getElementById('editHeroBtn')?.addEventListener('click', openEditHero);
+            document.getElementById('addSlideBtn')?.addEventListener('click', addNewSlide);
+            document.getElementById('addFeatureBtn')?.addEventListener('click', () => addGenericItem('feature'));
+            document.getElementById('addCourseBtn')?.addEventListener('click', () => addGenericItem('course'));
+            document.getElementById('addDocBtn')?.addEventListener('click', addDocumentWithUpload);
+            document.getElementById('addNewsBtn')?.addEventListener('click', () => addGenericItem('news'));
+            document.getElementById('addTeacherBtn')?.addEventListener('click', addTeacherWorkSimple);
+        }
+    }
+    
+    function openEditHero() { showModal(`<h3>Edit Hero</h3><div class="input-group"><label>Hero Title</label><input id="editHeroTitle" value="${escapeHtml(foundationData.heroTitle)}"></div><div class="input-group"><label>Hero Description</label><textarea id="editHeroDesc">${escapeHtml(foundationData.heroDesc)}</textarea></div><button id="saveBtn">Save</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.heroTitle = document.getElementById('editHeroTitle').value; foundationData.heroDesc = document.getElementById('editHeroDesc').value; renderHeroSlider(); renderWebsite(); closeModal(); showToast("🏠 Hero updated - Saved"); }); }
+    
+    async function addDocumentWithUpload() { 
+        showModal(`<h3>Upload Document</h3><div class="input-group"><label>Title</label><input id="newTitle"></div><div class="input-group"><label>Description</label><textarea id="newDesc"></textarea></div><div class="file-upload-area"><label>📁 Choose File: <input type="file" id="docFile" accept=".pdf,.doc,.docx,.txt,.xlsx,.ppt,.pptx"></label></div><button id="saveBtn">Upload</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => { 
+            const file = document.getElementById('docFile').files[0]; 
+            if (!file) { alert("Select a file"); return; } 
+            const base64 = await fileToBase64(file); 
+            foundationData.documents.push({ id: "d"+Date.now(), title: document.getElementById('newTitle').value || file.name, description: document.getElementById('newDesc').value || "Uploaded document", fileUrl: base64, fileData: base64 }); 
+            renderWebsite(); closeModal(); showToast("📄 Document uploaded - Saved permanently");
+        }); 
+    }
+    
+    async function addTeacherWorkSimple() {
+        showModal(`<h3>Add Resource</h3><div class="input-group"><label>Title</label><input id="newTitle"></div>
+            <div class="input-group"><label>Type</label><select id="newType"><option value="video">🎬 Video</option><option value="document">📄 Document</option><option value="link">🔗 Link</option><option value="image">🖼️ Picture</option></select></div>
+            <div class="input-group"><label>URL</label><input id="newContent" placeholder="https://..."></div>
+            <div class="input-group"><label>Caption</label><input id="newCaption"></div>
+            <div class="file-upload-area"><label>📁 Upload File: <input type="file" id="uploadFile" accept="image/*,video/*,application/pdf"></label></div>
+            <button id="saveBtn">Add</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, async () => {
+            const file = document.getElementById('uploadFile').files[0];
+            let content = document.getElementById('newContent').value;
+            if (file) content = await fileToBase64(file);
+            const type = document.getElementById('newType').value;
+            if (!content && type !== 'link') { alert("Provide URL or upload"); return; }
+            foundationData.teacherWorks.push({ id: "t"+Date.now(), title: document.getElementById('newTitle').value || "New Resource", type: type, content: content, caption: document.getElementById('newCaption').value || "", fileData: file ? content : "" });
+            renderWebsite(); closeModal(); showToast("✅ Resource added - Saved permanently");
+        });
+    }
+    
+    function addGenericItem(type) {
+        if (type === 'feature') showModal(`<h3>Add Feature</h3><div class="input-group"><label>Icon</label><input id="newIcon" value="fa-star"></div><div class="input-group"><label>Title</label><input id="newTitle"></div><div class="input-group"><label>Description</label><textarea id="newDesc"></textarea></div><button id="saveBtn">Add</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.features.push({ id: "f"+Date.now(), icon: document.getElementById('newIcon').value, title: document.getElementById('newTitle').value, desc: document.getElementById('newDesc').value }); renderWebsite(); closeModal(); showToast("✨ Feature added - Saved"); });
+        else if (type === 'course') showModal(`<h3>Add Course</h3><div class="input-group"><label>Title</label><input id="newTitle"></div><div class="input-group"><label>Description</label><textarea id="newDesc"></textarea></div><button id="saveBtn">Add</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.courses.push({ id: "c"+Date.now(), title: document.getElementById('newTitle').value, description: document.getElementById('newDesc').value, media: "" }); renderWebsite(); closeModal(); showToast("📚 Course added - Saved"); });
+        else if (type === 'news') showModal(`<h3>Add News</h3><div class="input-group"><label>Title</label><input id="newTitle"></div><div class="input-group"><label>Content</label><textarea id="newContent"></textarea></div><div class="input-group"><label>Date</label><input type="date" id="newDate"></div><button id="saveBtn">Add</button><button id="closeBtn" class="btn-secondary">Cancel</button>`, () => { foundationData.news.push({ id: "n"+Date.now(), title: document.getElementById('newTitle').value, content: document.getElementById('newContent').value, media: "", date: document.getElementById('newDate').value || new Date().toISOString().split('T')[0] }); renderWebsite(); closeModal(); showToast("📰 News added - Saved"); });
+    }
+
+    function removeAdminButtons() { const p = document.getElementById('globalAdminPanel'); if(p) p.remove(); }
+    function showModal(html, onSave) { const modal = document.getElementById('editorModal'); document.getElementById('editorModalContent').innerHTML = html; modal.style.display = 'flex'; document.getElementById('saveBtn')?.addEventListener('click', onSave); document.getElementById('closeBtn')?.addEventListener('click', closeModal); }
+    function closeModal() { document.getElementById('editorModal').style.display = 'none'; }
+
+    function performSearch() { 
+        currentSearchTerm = document.getElementById('searchInput').value.trim(); 
+        renderWebsite(); 
+        if (currentSearchTerm) { 
+            let found = false; 
+            const all = [...foundationData.courses, ...foundationData.news, ...foundationData.documents, ...foundationData.teacherWorks, ...foundationData.features]; 
+            if (all.some(i => i.title?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.description?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.content?.toLowerCase().includes(currentSearchTerm.toLowerCase()))) found = true; 
+            if (!found) alert("No results for: " + currentSearchTerm); 
+        } 
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(`${tabId}-page`).classList.add('active-page');
+        document.querySelectorAll('.sidebar .nav-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active');
+        if (isAdminLoggedIn) { removeAdminButtons(); addAdminButtons(); }
+    }
+
+    function updateUserStatus() {
+        const statusDiv = document.getElementById('userStatus');
+        statusDiv.innerHTML = isAdminLoggedIn ? `<span class="admin-badge-small"><i class="fas fa-crown"></i> Admin</span>` : '';
+    }
+
+    const adminModal = document.getElementById('adminModal');
+    const adminPortalBtn = document.getElementById('adminPortalBtn');
+    
+    function showAdminLogin() { adminModal.style.display = 'flex'; document.getElementById('adminEmail').focus(); }
+    function performAdminLogin() {
+        const enteredEmail = document.getElementById('adminEmail').value;
+        const enteredPassword = document.getElementById('adminPassword').value;
+        if (enteredEmail === ADMIN_EMAIL && enteredPassword === ADMIN_PASSWORD) { 
+            isAdminLoggedIn = true; 
+            adminModal.style.display = 'none'; 
+            updateUserStatus();
+            renderWebsite(); 
+            showToast("🔓 Admin mode activated - All changes will be saved");
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminLoginError').innerText = '';
+        } else { 
+            document.getElementById('adminLoginError').innerText = "Invalid email or password. Access denied."; 
+        }
+    }
+    
+    document.getElementById('adminLoginBtn')?.addEventListener('click', performAdminLogin);
+    document.getElementById('cancelAdminBtn')?.addEventListener('click', () => adminModal.style.display = 'none');
+    adminPortalBtn?.addEventListener('click', showAdminLogin);
+    
+    document.getElementById('adminPassword')?.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); performAdminLogin(); } });
+    document.getElementById('adminEmail')?.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); document.getElementById('adminPassword').focus(); } });
+    document.getElementById('searchInput')?.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); performSearch(); } });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (adminModal.style.display === 'flex') adminModal.style.display = 'none';
+            if (document.getElementById('editorModal').style.display === 'flex') closeModal();
+        }
+    });
+
+    function logoutAdmin() {
+        isAdminLoggedIn = false;
+        updateUserStatus();
+        renderWebsite();
+        showToast("🔒 Logged out of admin mode");
+    }
+
+    function updateAdminLogoutButton() {
+        const topBar = document.querySelector('.top-bar');
+        if (isAdminLoggedIn && !document.getElementById('adminLogoutBtn')) {
+            const logoutBtn = document.createElement('button');
+            logoutBtn.id = 'adminLogoutBtn';
+            logoutBtn.className = 'admin-trigger-btn logout-btn';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+            logoutBtn.onclick = logoutAdmin;
+            topBar.appendChild(logoutBtn);
+        } else if (!isAdminLoggedIn && document.getElementById('adminLogoutBtn')) {
+            document.getElementById('adminLogoutBtn')?.remove();
+        }
+    }
+
+    document.querySelectorAll('.sidebar .nav-tab').forEach(tab => tab.addEventListener('click', () => { switchTab(tab.getAttribute('data-tab')); document.getElementById('sidebar').classList.remove('open'); }));
+    document.getElementById('hamburgerBtn').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+    document.getElementById('closeSidebar').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+
+    setInterval(updateAdminLogoutButton, 500);
+    
+    loadData();
+    renderWebsite();
+    updateUserStatus();
+    updateAdminLogoutButton();
+</script>
+</body>
+</html>
