@@ -313,7 +313,7 @@
 
 <script>
     // ============================================
-    // PERSISTENT ADMIN SYSTEM - YOUR SLIDE IS INCLUDED BELOW
+    // PERSISTENT ADMIN SYSTEM - INCLUDING EXTERNAL SLIDER IMAGE
     // ============================================
     const ADMIN_EMAIL = "ameral320@gmail.com";
     const ADMIN_PASSWORD = "26372637";
@@ -356,14 +356,14 @@
         });
     }
 
-    // Complete Data Structure - YOUR SLIDE IS HERE
+    // Complete Data Structure - including the required external image slider with proper caption
     let foundationData = {
         heroTitle: "Sino-Africa Youth Foundation",
         heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
         sliderImages: [
             { 
                 id: "s1", 
-                url: "https://kommodo.ai/i/6dNWVjA0S6WIpwxaqMB0", 
+                url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/9af94ad49a769a0e6b4894868b83b5b094728163/photo.jpg", 
                 caption: "SAY seed teachers are working in team" 
             }
         ],
@@ -419,6 +419,8 @@
             slide.className = 'slide';
             if (idx === 0) slide.classList.add('active');
             slide.style.backgroundImage = `url('${img.url}')`;
+            slide.style.backgroundSize = 'cover';
+            slide.style.backgroundPosition = 'center';
             slide.innerHTML = `
                 <div class="slide-overlay">
                     <h1>${escapeHtml(foundationData.heroTitle)}</h1>
