@@ -25,7 +25,7 @@
         body.dark-mode input, body.dark-mode textarea { background: #334155; color: white; border-color: #475569; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         
-        /* Top right controls - only visible on home */
+        /* Top right controls */
         .top-bar {
             position: fixed;
             top: 20px;
@@ -36,26 +36,33 @@
             align-items: center;
         }
         
+        /* Search container - visible only on home page */
         .search-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
             border-radius: 40px;
-            padding: 3px 8px;
+            padding: 4px 8px;
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             transition: all 0.2s;
         }
-        body.dark-mode .search-container { background: #1e293b; }
+        .search-container.hidden {
+            display: none;
+        }
+        body.dark-mode .search-container { background: rgba(30,41,59,0.9); }
         .search-container input {
             border: none;
             padding: 6px 12px;
             border-radius: 40px;
-            width: 140px;
-            background: transparent;
+            width: 150px;
+            background: rgba(255,255,255,0.15);
             outline: none;
             font-size: 0.75rem;
+            color: white;
         }
+        .search-container input::placeholder { color: rgba(255,255,255,0.7); }
         .search-container button {
             background: #d4af37;
             color: #1e293b;
@@ -65,9 +72,11 @@
             font-weight: 600;
             cursor: pointer;
             border: none;
+            transition: all 0.2s;
         }
+        .search-container button:hover { transform: scale(1.02); background: #e5c450; }
         
-        /* Globe language icon - clean, no shadow, no white background */
+        /* Globe language icon - clean, no white shadow/background */
         .globe-lang-container {
             position: relative;
             display: none;
@@ -76,8 +85,7 @@
             display: block;
         }
         .globe-icon {
-            background: transparent !important;
-            backdrop-filter: none;
+            background: transparent;
             border: none;
             font-size: 1.4rem;
             cursor: pointer;
@@ -88,12 +96,11 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            color: #1e3c2c;
-            box-shadow: none !important;
-            background-color: transparent !important;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
-        body.dark-mode .globe-icon { color: #d4af37; background: transparent !important; }
-        .globe-icon:hover { transform: scale(1.08); color: #d4af37; background: transparent !important; }
+        body.dark-mode .globe-icon { color: #e2e8f0; }
+        .globe-icon:hover { transform: scale(1.08); color: #d4af37; }
         
         .lang-dropdown {
             position: absolute;
@@ -125,13 +132,11 @@
         body.dark-mode .lang-dropdown button { color: #e2e8f0; }
         .lang-dropdown button:hover { background: #d4af37; color: #1e293b; }
         
-        /* Mobile menu - only visible on home */
+        /* Mobile menu */
         .hamburger-btn {
-            position: fixed; 
-            top: 20px; 
-            left: 20px; 
-            z-index: 1001;
-            background: #1e3c2c; 
+            position: fixed; top: 20px; left: 20px; z-index: 1001;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
             border: none; 
             font-size: 1.2rem; 
             cursor: pointer;
@@ -144,12 +149,6 @@
             justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             transition: all 0.2s;
-        }
-        .hamburger-btn.hide-on-other-pages {
-            display: flex;
-        }
-        .hamburger-btn.hidden {
-            display: none !important;
         }
         .hamburger-btn:hover { transform: scale(1.05); background: #d4af37; color: #1e293b; }
         
@@ -179,7 +178,7 @@
         body.dark-mode .sidebar a { color: #e2e8f0; }
         .sidebar a:hover, .sidebar a.active { background: #d4af37; color: #1e293b; transform: translateX(6px); }
         
-        /* Compressed slider */
+        /* Compressed slider - fits screen */
         .hero {
             position: relative;
             width: 100%;
@@ -295,17 +294,19 @@
             .hero { height: 50vh; min-height: 380px; }
             .slide-overlay h1 { font-size: 1.6rem; }
             .section-title { font-size: 1.4rem; }
+            .search-container input { width: 100px; }
         }
     </style>
 </head>
 <body>
 
-<div class="top-bar" id="topBar">
+<div class="top-bar">
+    <!-- Search container - will be shown/hidden on home page -->
     <div class="search-container" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
         <button id="searchBtn"><i class="fas fa-search"></i></button>
     </div>
-    <!-- Globe language icon - clean, no shadow, no white background -->
+    <!-- Globe language icon - clean white, no shadow background -->
     <div class="globe-lang-container" id="globeLangContainer">
         <button class="globe-icon" id="globeIconBtn"><i class="fas fa-globe"></i></button>
         <div class="lang-dropdown" id="langDropdown">
@@ -349,7 +350,7 @@
 <div id="editorModal" class="modal"><div class="modal-content" id="editorModalContent"></div></div>
 
 <script>
-    // ==================== PERSISTENT SYSTEM + FULL LANGUAGE + CONTROLS ONLY ON HOME ====================
+    // ==================== SEARCH ONLY ON HOME + CLEAN GLOBE + FULL TRANSLATION ====================
     let currentSlideIndex = 0;
     let slideInterval;
     let currentSearchTerm = "";
@@ -435,7 +436,7 @@
     }
 
     function loadData() {
-        const saved = localStorage.getItem("saf_final_v11");
+        const saved = localStorage.getItem("saf_globe_clean_v11");
         if (saved) {
             foundationData = JSON.parse(saved);
         } else {
@@ -444,7 +445,7 @@
             saveData();
         }
     }
-    function saveData() { localStorage.setItem("saf_final_v11", JSON.stringify(foundationData)); }
+    function saveData() { localStorage.setItem("saf_globe_clean_v11", JSON.stringify(foundationData)); }
 
     let foundationData = {
         heroTitle: "Sino-Africa Youth Foundation",
@@ -546,25 +547,16 @@
         document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active'); 
         closeSidebar();
         
-        // Show/hide controls based on active page (only on home)
-        const isHome = (tabId === 'home');
-        const topBar = document.getElementById('topBar');
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        
-        if (isHome) {
-            topBar.style.display = 'flex';
-            hamburgerBtn.classList.remove('hidden');
-            hamburgerBtn.classList.add('hide-on-other-pages');
-        } else {
-            topBar.style.display = 'none';
-            hamburgerBtn.classList.add('hidden');
-            hamburgerBtn.classList.remove('hide-on-other-pages');
-        }
-        
-        // Globe visibility managed within its container
+        // Show/hide search container and globe based on active page (only on home)
+        const searchContainer = document.getElementById('searchContainer');
         const globeContainer = document.getElementById('globeLangContainer');
-        if (isHome) globeContainer.classList.add('active');
-        else globeContainer.classList.remove('active');
+        if (tabId === 'home') {
+            searchContainer.classList.remove('hidden');
+            globeContainer.classList.add('active');
+        } else {
+            searchContainer.classList.add('hidden');
+            globeContainer.classList.remove('active');
+        }
     }
     
     function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
@@ -590,8 +582,9 @@
     updateDynamicContent();
     renderWebsite(); 
     setLanguage('en');
-    // Ensure home page controls are visible initially
-    switchTab('home');
+    // Initialize visibility: home page active, so search & globe visible
+    document.getElementById('searchContainer').classList.remove('hidden');
+    document.getElementById('globeLangContainer').classList.add('active');
 </script>
 </body>
 </html>
