@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +36,6 @@
             align-items: center;
         }
         
-        /* Search container - visible only on home page */
         .search-container {
             background: rgba(0,0,0,0.65);
             backdrop-filter: blur(8px);
@@ -46,11 +45,8 @@
             align-items: center;
             gap: 6px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: all 0.2s;
         }
-        .search-container.hidden {
-            display: none;
-        }
+        .search-container.hidden { display: none; }
         body.dark-mode .search-container { background: rgba(30,41,59,0.9); }
         .search-container input {
             border: none;
@@ -72,18 +68,10 @@
             font-weight: 600;
             cursor: pointer;
             border: none;
-            transition: all 0.2s;
         }
-        .search-container button:hover { transform: scale(1.02); background: #e5c450; }
         
-        /* Globe language icon - clean, no white shadow/background */
-        .globe-lang-container {
-            position: relative;
-            display: none;
-        }
-        .globe-lang-container.active {
-            display: block;
-        }
+        .globe-lang-container { position: relative; display: none; }
+        .globe-lang-container.active { display: block; }
         .globe-icon {
             background: transparent;
             border: none;
@@ -95,11 +83,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
             color: white;
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
-        body.dark-mode .globe-icon { color: #e2e8f0; }
         .globe-icon:hover { transform: scale(1.08); color: #d4af37; }
         
         .lang-dropdown {
@@ -114,7 +100,6 @@
             display: none;
             z-index: 1100;
             flex-direction: column;
-            overflow: hidden;
         }
         body.dark-mode .lang-dropdown { background: #1e293b; border: 1px solid #334155; }
         .lang-dropdown.active { display: flex; }
@@ -125,29 +110,19 @@
             text-align: left;
             font-weight: 600;
             font-size: 0.85rem;
-            transition: background 0.2s;
-            color: #1e293b;
             cursor: pointer;
+            color: #1e293b;
         }
         body.dark-mode .lang-dropdown button { color: #e2e8f0; }
         .lang-dropdown button:hover { background: #d4af37; color: #1e293b; }
         
-        /* Mobile menu */
         .hamburger-btn {
             position: fixed; top: 20px; left: 20px; z-index: 1001;
             background: rgba(0,0,0,0.65);
             backdrop-filter: blur(8px);
-            border: none; 
-            font-size: 1.2rem; 
-            cursor: pointer;
-            color: white; 
-            width: 42px; 
-            height: 42px; 
-            border-radius: 50%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: none; font-size: 1.2rem; cursor: pointer;
+            color: white; width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             transition: all 0.2s;
         }
         .hamburger-btn:hover { transform: scale(1.05); background: #d4af37; color: #1e293b; }
@@ -168,17 +143,16 @@
         .sidebar .close-sidebar {
             position: absolute; top: 20px; right: 20px;
             background: none; border: none; font-size: 1.4rem;
-            cursor: pointer; border-radius: 50%; padding: 8px;
+            cursor: pointer;
         }
         .sidebar a {
             display: block; padding: 14px 18px; margin: 8px 0;
             text-decoration: none; color: #1e293b; font-weight: 600;
-            border-radius: 16px; cursor: pointer; transition: all 0.2s;
+            border-radius: 16px; cursor: pointer;
         }
         body.dark-mode .sidebar a { color: #e2e8f0; }
         .sidebar a:hover, .sidebar a.active { background: #d4af37; color: #1e293b; transform: translateX(6px); }
         
-        /* Compressed slider - fits screen */
         .hero {
             position: relative;
             width: 100%;
@@ -190,69 +164,33 @@
             border-radius: 0 0 32px 32px;
             margin-bottom: 20px;
         }
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+        .slider-container { position: relative; width: 100%; height: 100%; }
         .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center 30%;
-            background-repeat: no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateX(100%);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center 30%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transform: translateX(100%);
             transition: transform 0.6s ease-in-out, opacity 0.4s ease-in-out;
             z-index: 1;
         }
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-            z-index: 2;
-        }
+        .slide.active { opacity: 1; transform: translateX(0); z-index: 2; }
         .slide.exit-right { transform: translateX(100%); opacity: 0; }
         .slide.enter-left { transform: translateX(-100%); }
         .slide-overlay {
             background: linear-gradient(135deg, rgba(0,0,0,0.55), rgba(0,0,0,0.4));
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; color: white;
             padding: 20px;
         }
-        .slide-overlay h1 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-        }
-        .slide-overlay p {
-            font-size: 1.1rem;
-            max-width: 700px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
+        .slide-overlay h1 { font-size: 2.5rem; margin-bottom: 16px; text-shadow: 2px 2px 6px rgba(0,0,0,0.5); }
+        .slide-overlay p { font-size: 1.1rem; max-width: 700px; }
         .slide-caption {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            background: rgba(0,0,0,0.65);
-            color: white;
-            padding: 10px;
-            font-size: 0.9rem;
+            position: absolute; bottom: 20px; left: 0; right: 0;
+            text-align: center; background: rgba(0,0,0,0.65);
+            color: white; padding: 10px; font-size: 0.9rem;
             z-index: 3;
-            font-weight: 500;
         }
         
         .section-title { font-size: 1.8rem; font-weight: 700; margin: 40px 0 24px 0; border-left: 5px solid #d4af37; padding-left: 20px; }
@@ -261,22 +199,25 @@
         }
         .feature-card, .course-card, .document-card, .news-card, .teacher-card {
             background: white; border-radius: 24px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0; transition: all 0.2s;
+            border: 1px solid #e2e8f0;
         }
         .feature-card i { font-size: 2rem; color: #d4af37; margin-bottom: 12px; }
-        .download-link, .file-link { display: inline-block; margin-top: 10px; color: #d4af37; text-decoration: none; font-weight: 700; cursor: pointer; }
+        .teacher-card a, .document-card a { display: inline-block; margin-top: 10px; color: #d4af37; text-decoration: none; font-weight: 700; cursor: pointer; }
+        .zoom-link {
+            display: inline-block;
+            background: #0e5a6b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            margin: 20px 0;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .zoom-link:hover { background: #0c4a5a; transform: translateY(-2px); }
         .news-header { display: flex; justify-content: space-between; align-items: center; }
         .seven-star { width: 28px; height: 28px; animation: blinkRed 0.8s step-start infinite; }
         @keyframes blinkRed { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center;
-            align-items: center; z-index: 1200;
-        }
-        .modal-content { background: white; max-width: 600px; width: 90%; border-radius: 32px; padding: 28px; max-height: 85vh; overflow-y: auto; }
-        .input-group { margin: 18px 0; }
-        .input-group label { font-weight: 700; display: block; margin-bottom: 6px; }
-        input, textarea, select { width: 100%; padding: 10px 16px; border: 1px solid #cbd5e1; border-radius: 28px; }
         .page-content { display: none; }
         .page-content.active-page { display: block; }
         .contact-block { background: #eef2ff; border-radius: 28px; padding: 28px; margin: 40px 0; }
@@ -286,27 +227,21 @@
             position: fixed; bottom: 30px; right: 30px; background: #1e3c2c; color: white;
             padding: 10px 20px; border-radius: 40px; z-index: 1300; animation: slideIn 0.3s ease;
         }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @media (max-width: 768px) {
             .hero { height: 50vh; min-height: 380px; }
             .slide-overlay h1 { font-size: 1.6rem; }
             .section-title { font-size: 1.4rem; }
-            .search-container input { width: 100px; }
         }
     </style>
 </head>
 <body>
 
 <div class="top-bar">
-    <!-- Search container - will be shown/hidden on home page -->
     <div class="search-container" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
         <button id="searchBtn"><i class="fas fa-search"></i></button>
     </div>
-    <!-- Globe language icon - clean white, no shadow background -->
     <div class="globe-lang-container" id="globeLangContainer">
         <button class="globe-icon" id="globeIconBtn"><i class="fas fa-globe"></i></button>
         <div class="lang-dropdown" id="langDropdown">
@@ -334,6 +269,11 @@
     <div id="home-page" class="page-content active-page">
         <div class="hero"><div class="slider-container" id="sliderContainer"></div></div>
         <div class="container">
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="https://minnstate.zoom.us/j/98833088394" target="_blank" class="zoom-link" id="zoomLinkBtn">
+                    <i class="fas fa-video"></i> <span data-i18n="zoomJoin">Join Live Zoom Class</span>
+                </a>
+            </div>
             <div class="section-title"><i class="fas fa-star-of-life"></i> <span data-i18n="coreFeatures">Core Features</span></div>
             <div class="features-grid" id="featuresGrid"></div>
         </div>
@@ -347,114 +287,37 @@
 
 <footer><div class="container"><p>© 2026 Sino-Africa Youth Foundation — P.O.BOX 3718, Zanzibar, Tanzania | Building Tomorrow Together</p></div></footer>
 
-<div id="editorModal" class="modal"><div class="modal-content" id="editorModalContent"></div></div>
-
 <script>
-    // ==================== SEARCH ONLY ON HOME + CLEAN GLOBE + FULL TRANSLATION ====================
-    let currentSlideIndex = 0;
-    let slideInterval;
-    let currentSearchTerm = "";
-    let isTransitioning = false;
-    let currentLang = "en";
-
-    // Complete translations for ALL text elements
+    // ==================== FULLY UPDATED WITH NEW SLIDE, TEACHER WORKS, ZOOM & DOCUMENT ====================
+    let currentSlideIndex = 0, slideInterval, currentSearchTerm = "", isTransitioning = false, currentLang = "en";
+    
     const translations = {
-        en: {
-            home: "Home", courses: "Courses", documents: "Documents", news: "News",
-            teacherWorks: "Teacher Works", about: "About Us", coreFeatures: "Core Features",
-            ourCourses: "Our Courses", officialDocs: "Official Documents", latestNews: "Latest News",
-            teacherResources: "Teacher Resources", aboutUs: "About Us", contactInfo: "Contact Information",
-            readMore: "Read More", download: "Download", heroTitle: "Sino-Africa Youth Foundation",
-            heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
-            feature1Title: "Gamified Learning", feature1Desc: "Earn badges and certificates as you complete courses.",
-            feature2Title: "Events & Workshops", feature2Desc: "Regular cultural exchanges and leadership camps.",
-            feature3Title: "AI Career Assistant", feature3Desc: "24/7 guidance for job and scholarship applications.",
-            course1Title: "CHINESE LANGUAGE FOR BEGINNERS", course1Desc: "Learn Chinese to secure Sino-African opportunities.",
-            course2Title: "AI FOUNDATION", course2Desc: "AI experts training tomorrow's leaders.",
-            aboutText: "Sino-Africa Youth Foundation is a non-profit organization dedicated to fostering youth development, cultural exchange, and sustainable cooperation between China and African nations.",
-            contactAddr1: "P.O.BOX 3718, Shangani", contactAddr2: "Office : SH/UZ/163/J, Tomondo, Western Region",
-            contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
-        },
-        sw: {
-            home: "Nyumbani", courses: "Kozi", documents: "Nyaraka", news: "Habari",
-            teacherWorks: "Kazi za Walimu", about: "Kuhusu Sisi", coreFeatures: "Vipengele Muhimu",
-            ourCourses: "Kozi Zetu", officialDocs: "Nyaraka Rasmi", latestNews: "Habari za Hivi Punde",
-            teacherResources: "Nyenzo za Walimu", aboutUs: "Kuhusu Sisi", contactInfo: "Mawasiliano",
-            readMore: "Soma Zaidi", download: "Pakua", heroTitle: "Sino-Africa Youth Foundation",
-            heroDesc: "Kuwawezesha vijana kupitia ujuzi, utamaduni, na maendeleo endelevu. Makao Zanzibar.",
-            feature1Title: "Kujifunza kwa Michezo", feature1Desc: "Pata beji na cheti unapokamilisha kozi.",
-            feature2Title: "Matukio na Warsha", feature2Desc: "Mabadilishano ya kitamaduni na kambi za uongozi.",
-            feature3Title: "Msaidizi wa Kazi wa AI", feature3Desc: "Mwongozo wa 24/7 kwa fursa za kazi na udhamini.",
-            course1Title: "LUGHA YA KICHINA KWA WANAOANZA", course1Desc: "Jifunze Kichina kupata fursa za Sino-Afrika.",
-            course2Title: "MSINGI WA AI", course2Desc: "Wataalam wa AI wanaotoa mafunzo kwa viongozi wa kesho.",
-            aboutText: "Sino-Africa Youth Foundation ni shirika lisilo la faida linalojitolea kukuza maendeleo ya vijana, kubadilishana utamaduni, na ushirikiano endelevu kati ya China na mataifa ya Afrika.",
-            contactAddr1: "S.L.P 3718, Shangani", contactAddr2: "Ofisi : SH/UZ/163/J, Tomondo, Mkoa wa Magharibi",
-            contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
-        },
-        zh: {
-            home: "首页", courses: "课程", documents: "文件", news: "新闻",
-            teacherWorks: "教师作品", about: "关于我们", coreFeatures: "核心功能",
-            ourCourses: "我们的课程", officialDocs: "官方文件", latestNews: "最新消息",
-            teacherResources: "教师资源", aboutUs: "关于我们", contactInfo: "联系方式",
-            readMore: "了解更多", download: "下载", heroTitle: "中非青年基金会",
-            heroDesc: "通过技能、文化和可持续发展赋能青年。总部位于桑给巴尔。",
-            feature1Title: "游戏化学习", feature1Desc: "完成课程获得徽章和证书。",
-            feature2Title: "活动与工作坊", feature2Desc: "定期文化交流和领导力训练营。",
-            feature3Title: "AI职业助手", feature3Desc: "24/7为工作和奖学金申请提供指导。",
-            course1Title: "中文入门", course1Desc: "学习中文，抓住中非合作机遇。",
-            course2Title: "人工智能基础", course2Desc: "AI专家培训未来的领导者。",
-            aboutText: "中非青年基金会是一个非营利组织，致力于促进青年发展、文化交流以及中国与非洲国家之间的可持续合作。",
-            contactAddr1: "邮政信箱 3718, Shangani", contactAddr2: "办公室：SH/UZ/163/J, Tomondo, 西部地区",
-            contactAddr3: "坦桑尼亚桑给巴尔", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
-        }
+        en: { home: "Home", courses: "Courses", documents: "Documents", news: "News", teacherWorks: "Teacher Works", about: "About Us", coreFeatures: "Core Features", ourCourses: "Our Courses", officialDocs: "Official Documents", latestNews: "Latest News", teacherResources: "Teacher Resources", aboutUs: "About Us", contactInfo: "Contact Information", readMore: "Open Resource", download: "Download", zoomJoin: "Join Live Zoom Class", heroTitle: "Sino-Africa Youth Foundation", heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.", feature1Title: "Gamified Learning", feature1Desc: "Earn badges and certificates as you complete courses.", feature2Title: "Events & Workshops", feature2Desc: "Regular cultural exchanges and leadership camps.", feature3Title: "AI Career Assistant", feature3Desc: "24/7 guidance for job and scholarship applications.", course1Title: "CHINESE LANGUAGE FOR BEGINNERS", course1Desc: "Learn Chinese to secure Sino-African opportunities.", course2Title: "AI FOUNDATION", course2Desc: "AI experts training tomorrow's leaders.", aboutText: "Sino-Africa Youth Foundation is a non-profit organization dedicated to fostering youth development, cultural exchange, and sustainable cooperation between China and African nations.", contactAddr1: "P.O.BOX 3718, Shangani", contactAddr2: "Office : SH/UZ/163/J, Tomondo, Western Region", contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389" },
+        sw: { home: "Nyumbani", courses: "Kozi", documents: "Nyaraka", news: "Habari", teacherWorks: "Kazi za Walimu", about: "Kuhusu Sisi", coreFeatures: "Vipengele Muhimu", ourCourses: "Kozi Zetu", officialDocs: "Nyaraka Rasmi", latestNews: "Habari za Hivi Punde", teacherResources: "Nyenzo za Walimu", aboutUs: "Kuhusu Sisi", contactInfo: "Mawasiliano", readMore: "Fungua Kiungo", download: "Pakua", zoomJoin: "Jiunge na Darasa la Zoom", heroTitle: "Sino-Africa Youth Foundation", heroDesc: "Kuwawezesha vijana kupitia ujuzi, utamaduni, na maendeleo endelevu. Makao Zanzibar.", feature1Title: "Kujifunza kwa Michezo", feature1Desc: "Pata beji na cheti unapokamilisha kozi.", feature2Title: "Matukio na Warsha", feature2Desc: "Mabadilishano ya kitamaduni na kambi za uongozi.", feature3Title: "Msaidizi wa Kazi wa AI", feature3Desc: "Mwongozo wa 24/7 kwa fursa za kazi na udhamini.", course1Title: "LUGHA YA KICHINA KWA WANAOANZA", course1Desc: "Jifunze Kichina kupata fursa za Sino-Afrika.", course2Title: "MSINGI WA AI", course2Desc: "Wataalam wa AI wanaotoa mafunzo kwa viongozi wa kesho.", aboutText: "Sino-Africa Youth Foundation ni shirika lisilo la faida linalojitolea kukuza maendeleo ya vijana, kubadilishana utamaduni, na ushirikiano endelevu kati ya China na mataifa ya Afrika.", contactAddr1: "S.L.P 3718, Shangani", contactAddr2: "Ofisi : SH/UZ/163/J, Tomondo, Mkoa wa Magharibi", contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389" },
+        zh: { home: "首页", courses: "课程", documents: "文件", news: "新闻", teacherWorks: "教师作品", about: "关于我们", coreFeatures: "核心功能", ourCourses: "我们的课程", officialDocs: "官方文件", latestNews: "最新消息", teacherResources: "教师资源", aboutUs: "关于我们", contactInfo: "联系方式", readMore: "打开链接", download: "下载", zoomJoin: "加入Zoom课堂", heroTitle: "中非青年基金会", heroDesc: "通过技能、文化和可持续发展赋能青年。总部位于桑给巴尔。", feature1Title: "游戏化学习", feature1Desc: "完成课程获得徽章和证书。", feature2Title: "活动与工作坊", feature2Desc: "定期文化交流和领导力训练营。", feature3Title: "AI职业助手", feature3Desc: "24/7为工作和奖学金申请提供指导。", course1Title: "中文入门", course1Desc: "学习中文，抓住中非合作机遇。", course2Title: "人工智能基础", course2Desc: "AI专家培训未来的领导者。", aboutText: "中非青年基金会是一个非营利组织，致力于促进青年发展、文化交流以及中国与非洲国家之间的可持续合作。", contactAddr1: "邮政信箱 3718, Shangani", contactAddr2: "办公室：SH/UZ/163/J, Tomondo, 西部地区", contactAddr3: "坦桑尼亚桑给巴尔", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389" }
     };
 
     function setLanguage(lang) {
         currentLang = lang;
-        // Update all i18n elements
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) el.innerText = translations[lang][key];
-        });
-        // Update dynamic content that uses translations
-        updateDynamicContent();
-        // Update hero title and description
-        foundationData.heroTitle = translations[lang].heroTitle;
-        foundationData.heroDesc = translations[lang].heroDesc;
-        renderHeroSlider();
-        renderWebsite();
+        document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (translations[lang][key]) el.innerText = translations[lang][key]; });
+        foundationData.heroTitle = translations[lang].heroTitle; foundationData.heroDesc = translations[lang].heroDesc;
+        updateDynamicContent(); renderHeroSlider(); renderWebsite();
         document.getElementById('langDropdown').classList.remove('active');
         showToast(`Language: ${lang.toUpperCase()}`);
         saveData();
     }
-
-    function showToast(msg, isErr=false) {
-        const toast = document.createElement('div'); toast.className = 'toast-notification';
-        toast.style.background = isErr ? '#b91c1c' : '#1e3c2c';
-        toast.innerText = msg; document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
-    }
-
-    function loadData() {
-        const saved = localStorage.getItem("saf_globe_clean_v11");
-        if (saved) {
-            foundationData = JSON.parse(saved);
-        } else {
-            foundationData.heroTitle = translations[currentLang].heroTitle;
-            foundationData.heroDesc = translations[currentLang].heroDesc;
-            saveData();
-        }
-    }
-    function saveData() { localStorage.setItem("saf_globe_clean_v11", JSON.stringify(foundationData)); }
+    function showToast(msg) { const t = document.createElement('div'); t.className = 'toast-notification'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
+    function loadData() { const saved = localStorage.getItem("saf_final_v12"); if (saved) foundationData = JSON.parse(saved); else saveData(); }
+    function saveData() { localStorage.setItem("saf_final_v12", JSON.stringify(foundationData)); }
 
     let foundationData = {
-        heroTitle: "Sino-Africa Youth Foundation",
-        heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
+        heroTitle: "Sino-Africa Youth Foundation", heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
         sliderImages: [
-            { id: "s1", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0008.jpg", caption: "📚 SAY LIBRARY" },
-            { id: "s2", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0009.jpg", caption: "🏫 SAY TRAINING CENTER" },
-            { id: "s3", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0011.jpg", caption: "🎓 SAY seed teachers on zoom with Prof Li" },
-            { id: "s4", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/Screenshot_2026-04-10-06-56-54-839_com.android.chrome-edit.jpg", caption: "⚙️ SAY on-site training continues" }
+            { id: "s1", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/4d81ee3dcf60ee857bfb396bf9d9653e1d72c956/photo.jpg", caption: "🌍 SAY Global Impact" },
+            { id: "s2", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0008.jpg", caption: "📚 SAY LIBRARY" },
+            { id: "s3", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0009.jpg", caption: "🏫 SAY TRAINING CENTER" },
+            { id: "s4", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0011.jpg", caption: "🎓 SAY seed teachers on zoom with Prof Li" },
+            { id: "s5", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/Screenshot_2026-04-10-06-56-54-839_com.android.chrome-edit.jpg", caption: "⚙️ SAY on-site training continues" }
         ],
         features: [
             { id: "f1", icon: "fa-gamepad", titleKey: "feature1Title", descKey: "feature1Desc" },
@@ -466,31 +329,32 @@
             { id: "c2", titleKey: "course2Title", descKey: "course2Desc" }
         ],
         documents: [
-            { id: "d1", title: "Annual Report 2025", description: "Full report on foundation activities.", fileUrl: "#", fileData: "" }
+            { id: "d1", title: "Chinese Language Book (Beginners)", description: "汉语口语速成入门篇上 - Speak Chinese Quickly", fileUrl: "https://raw.githubusercontent.com/ameral320-ai/SAY12/98958b17b5054160005421cbb2d496447a70a13c/%E6%B1%89%E8%AF%AD%E5%8F%A3%E8%AF%AD%E9%80%9F%E6%88%90%E5%85%A5%E9%97%A8%E7%AF%87%E4%B8%8A.pdf", fileData: "" }
         ],
         news: [
             { id: "n1", title: "New Partnership with UNESCO", content: "Global education initiative launched.", date: "2026-03-15" },
             { id: "n2", title: "Scholarship Applications Open", content: "Apply now for the 2026 cohort.", date: "2026-04-01" }
         ],
         teacherWorks: [
-            { id: "t1", title: "Mr Ame - Documentation", type: "link", content: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/README.md", caption: "📄 View Mr Ame's resources & guide", fileData: "" }
+            { id: "t1", teacher: "Mr Ame", title: "Area of Regular Figures", type: "link", content: "https://ameral320-ai.github.io/Form-one-Area-of-regular-figures/" },
+            { id: "t2", teacher: "Mr Ame", title: "Form Two Algebra", type: "link", content: "https://ameral320-ai.github.io/Math/" },
+            { id: "t3", teacher: "Mr Ame", title: "Form Two Assessment", type: "link", content: "https://ameral320-ai.github.io/form2/" },
+            { id: "t4", teacher: "Mr Ame", title: "Algebra Assessments Hub", type: "link", content: "https://ameral320-ai.github.io/assessments/" },
+            { id: "t5", teacher: "Madam G", title: "Math Form One - Approximation", type: "link", content: "https://madamghanil-3358.github.io/MATH-FORM-ONE-APPROXIMATION-/" },
+            { id: "t6", teacher: "Madam G", title: "Concept of Numbers", type: "link", content: "https://madamghanil-3358.github.io/MATH-FORM-ONE-Concept-of-Numbers-/" },
+            { id: "t7", teacher: "Madam G", title: "Student Assessment", type: "link", content: "https://madamghanil-3358.github.io/STUDENT-ASSESSMENT/" },
+            { id: "t8", teacher: "Madam G", title: "Math with Madam G", type: "link", content: "https://madamghanil-3358.github.io/Math-with-madam-G/" },
+            { id: "t9", teacher: "Madam G / Mshamata", title: "History of Tanzania, Zanzibar & Dodoma", type: "link", content: "https://madamghanil-3358.github.io/History-of-Tanzania-Zanzibar-and-Dodoma/" },
+            { id: "t10", teacher: "Madam Samira", title: "Pronunciation Guide", type: "link", content: "https://samirasukheil4-del.github.io/pronunciation/" },
+            { id: "t11", teacher: "Madam Samira", title: "Civics Form One", type: "link", content: "https://samirasukheil4-del.github.io/civics1/" }
         ],
         aboutTextKey: "aboutText",
-        contact: {
-            addr1Key: "contactAddr1", addr2Key: "contactAddr2", addr3Key: "contactAddr3",
-            websiteKey: "website", emailKey: "email", phoneKey: "phone"
-        }
+        contact: { addr1Key: "contactAddr1", addr2Key: "contactAddr2", addr3Key: "contactAddr3", websiteKey: "website", emailKey: "email", phoneKey: "phone" }
     };
 
     function updateDynamicContent() {
-        foundationData.features.forEach(f => {
-            f.title = translations[currentLang][f.titleKey];
-            f.desc = translations[currentLang][f.descKey];
-        });
-        foundationData.courses.forEach(c => {
-            c.title = translations[currentLang][c.titleKey];
-            c.description = translations[currentLang][c.descKey];
-        });
+        foundationData.features.forEach(f => { f.title = translations[currentLang][f.titleKey]; f.desc = translations[currentLang][f.descKey]; });
+        foundationData.courses.forEach(c => { c.title = translations[currentLang][c.titleKey]; c.description = translations[currentLang][c.descKey]; });
         foundationData.aboutText = translations[currentLang][foundationData.aboutTextKey];
         foundationData.contact.addressLine1 = translations[currentLang][foundationData.contact.addr1Key];
         foundationData.contact.addressLine2 = translations[currentLang][foundationData.contact.addr2Key];
@@ -505,16 +369,11 @@
     function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
     function renderHeroSlider() {
-        const container = document.getElementById('sliderContainer');
-        if (!container) return;
-        container.innerHTML = '';
+        const container = document.getElementById('sliderContainer'); if (!container) return; container.innerHTML = '';
         if (foundationData.sliderImages.length === 0) { container.innerHTML = `<div class="no-slider-message"><h2>📸 Slides will appear here</h2></div>`; return; }
         foundationData.sliderImages.forEach((img, idx) => {
-            const slide = document.createElement('div'); slide.className = 'slide';
-            if (idx === 0) slide.classList.add('active');
-            slide.style.backgroundImage = `url('${img.url}')`;
-            slide.style.backgroundSize = 'cover';
-            slide.style.backgroundPosition = 'center 30%';
+            const slide = document.createElement('div'); slide.className = 'slide'; if (idx === 0) slide.classList.add('active');
+            slide.style.backgroundImage = `url('${img.url}')`; slide.style.backgroundSize = 'cover'; slide.style.backgroundPosition = 'center 30%';
             slide.innerHTML = `<div class="slide-overlay"><h1>${escapeHtml(foundationData.heroTitle)}</h1><p>${escapeHtml(foundationData.heroDesc)}</p></div><div class="slide-caption"><i class="fas fa-camera"></i> ${escapeHtml(img.caption)}</div>`;
             container.appendChild(slide);
         });
@@ -523,22 +382,21 @@
     
     function startSlider() { if (slideInterval) clearInterval(slideInterval); if (foundationData.sliderImages.length <= 1) return; slideInterval = setInterval(() => { if (isTransitioning) return; isTransitioning = true; const slides = document.querySelectorAll('.slide'); if (slides.length === 0) return; const current = slides[currentSlideIndex]; current.classList.add('exit-right'); current.classList.remove('active'); const nextIdx = (currentSlideIndex + 1) % slides.length; const next = slides[nextIdx]; next.classList.add('enter-left'); setTimeout(() => { next.classList.remove('enter-left'); next.classList.add('active'); current.classList.remove('exit-right'); isTransitioning = false; currentSlideIndex = nextIdx; }, 550); }, 5000); }
     
-    function openLink(url) { if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer'); else showToast("Link unavailable", true); }
+    function openLink(url) { if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer'); else showToast("Link unavailable"); }
 
     function renderWebsite() {
-        renderHeroSlider();
-        updateDynamicContent();
+        renderHeroSlider(); updateDynamicContent();
         document.getElementById('featuresGrid').innerHTML = foundationData.features.map(f => `<div class="feature-card"><i class="fas ${f.icon}"></i><h3>${highlightText(f.title)}</h3><p>${highlightText(f.desc)}</p></div>`).join('');
         document.getElementById('coursesContainer').innerHTML = foundationData.courses.map(c => `<div class="course-card"><h3>${highlightText(c.title)}</h3><p>${highlightText(c.description)}</p></div>`).join('');
-        document.getElementById('documentsContainer').innerHTML = foundationData.documents.map(d => `<div class="document-card"><h3><i class="fas fa-file-pdf"></i> ${highlightText(d.title)}</h3><p>${highlightText(d.description)}</p>${d.fileData && d.fileData !== '#' ? `<a class="download-link" onclick="openLink('${d.fileData}')">📥 ${translations[currentLang].download}</a>` : d.fileUrl !== '#' ? `<a class="download-link" onclick="openLink('${d.fileUrl}')">🔗 View</a>` : '<span>No file</span>'}</div>`).join('');
+        document.getElementById('documentsContainer').innerHTML = foundationData.documents.map(d => `<div class="document-card"><h3><i class="fas fa-file-pdf"></i> ${highlightText(d.title)}</h3><p>${highlightText(d.description)}</p><a onclick="openLink('${d.fileUrl}')">📥 ${translations[currentLang].download}</a></div>`).join('');
         document.getElementById('newsContainer').innerHTML = foundationData.news.map(n => `<div class="news-card"><div class="news-header"><h3>${highlightText(n.title)}</h3><svg class="seven-star" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,53 79,85 50,67 21,85 32,53 5,35 39,35" fill="red"/></svg></div><small>${n.date}</small><p>${highlightText(n.content)}</p></div>`).join('');
-        document.getElementById('teachersContainer').innerHTML = foundationData.teacherWorks.map(item => `<div class="teacher-card"><h3>📚 ${highlightText(item.title)}</h3><p><strong>${item.type}</strong></p><p>${highlightText(item.caption)}</p><a class="file-link" onclick="openLink('${item.content}')"><i class="fas fa-external-link-alt"></i> ${translations[currentLang].readMore}</a></div>`).join('');
+        document.getElementById('teachersContainer').innerHTML = foundationData.teacherWorks.map(item => `<div class="teacher-card"><h3>👩‍🏫 ${item.teacher}</h3><h4>📘 ${highlightText(item.title)}</h4><a onclick="openLink('${item.content}')"><i class="fas fa-external-link-alt"></i> ${translations[currentLang].readMore}</a></div>`).join('');
         document.getElementById('aboutContent').innerHTML = `<p>${highlightText(foundationData.aboutText)}</p>`;
         document.getElementById('contactDetails').innerHTML = `<p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(foundationData.contact.addressLine1)}<br>${escapeHtml(foundationData.contact.addressLine2)}<br>${escapeHtml(foundationData.contact.addressLine3)}</p><p><i class="fas fa-globe"></i> <a href="${foundationData.contact.website}" target="_blank">${foundationData.contact.website}</a></p><p><i class="fas fa-envelope"></i> <a href="mailto:${foundationData.contact.email}">${foundationData.contact.email}</a></p><p><i class="fas fa-phone-alt"></i> ${foundationData.contact.phone}</p>`;
         saveData();
     }
 
-    function performSearch() { currentSearchTerm = document.getElementById('searchInput').value.trim(); renderWebsite(); if(currentSearchTerm){ let found = false; const all = [...foundationData.courses, ...foundationData.news, ...foundationData.documents, ...foundationData.teacherWorks, ...foundationData.features]; if(all.some(i=>i.title?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.description?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.content?.toLowerCase().includes(currentSearchTerm.toLowerCase()))) found=true; if(!found) alert("No results found for: " + currentSearchTerm); } }
+    function performSearch() { currentSearchTerm = document.getElementById('searchInput').value.trim(); renderWebsite(); if(currentSearchTerm){ let found = false; const all = [...foundationData.courses, ...foundationData.news, ...foundationData.documents, ...foundationData.teacherWorks, ...foundationData.features]; if(all.some(i=>i.title?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.description?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.content?.toLowerCase().includes(currentSearchTerm.toLowerCase()))) found=true; if(!found) alert("No results found"); } }
     
     function switchTab(tabId) { 
         document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active-page')); 
@@ -546,23 +404,14 @@
         document.querySelectorAll('.sidebar .nav-tab').forEach(t=>t.classList.remove('active')); 
         document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active'); 
         closeSidebar();
-        
-        // Show/hide search container and globe based on active page (only on home)
-        const searchContainer = document.getElementById('searchContainer');
-        const globeContainer = document.getElementById('globeLangContainer');
-        if (tabId === 'home') {
-            searchContainer.classList.remove('hidden');
-            globeContainer.classList.add('active');
-        } else {
-            searchContainer.classList.add('hidden');
-            globeContainer.classList.remove('active');
-        }
+        const searchContainer = document.getElementById('searchContainer'), globeContainer = document.getElementById('globeLangContainer');
+        if (tabId === 'home') { searchContainer.classList.remove('hidden'); globeContainer.classList.add('active'); } 
+        else { searchContainer.classList.add('hidden'); globeContainer.classList.remove('active'); }
     }
     
     function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
     function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('active'); }
     
-    // Event listeners
     document.getElementById('hamburgerBtn')?.addEventListener('click', openSidebar);
     document.getElementById('closeSidebar')?.addEventListener('click', closeSidebar);
     document.getElementById('sidebarOverlay')?.addEventListener('click', closeSidebar);
@@ -571,20 +420,14 @@
     document.getElementById('searchInput')?.addEventListener('keypress', e=>{ if(e.key==='Enter') performSearch(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSidebar(); });
     
-    // Globe language menu logic
-    const globeIconBtn = document.getElementById('globeIconBtn');
-    const langDropdown = document.getElementById('langDropdown');
+    const globeIconBtn = document.getElementById('globeIconBtn'), langDropdown = document.getElementById('langDropdown');
     globeIconBtn?.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('active'); });
     document.addEventListener('click', (e) => { if (!globeIconBtn?.contains(e.target) && !langDropdown?.contains(e.target)) langDropdown?.classList.remove('active'); });
     document.querySelectorAll('.lang-dropdown button').forEach(btn => btn.addEventListener('click', (e) => { setLanguage(btn.getAttribute('data-lang')); langDropdown.classList.remove('active'); }));
     
-    loadData(); 
-    updateDynamicContent();
-    renderWebsite(); 
-    setLanguage('en');
-    // Initialize visibility: home page active, so search & globe visible
-    document.getElementById('searchContainer').classList.remove('hidden');
-    document.getElementById('globeLangContainer').classList.add('active');
+    loadData(); updateDynamicContent(); renderWebsite(); setLanguage('en');
+    document.getElementById('searchContainer').classList.remove('hidden'); document.getElementById('globeLangContainer').classList.add('active');
 </script>
 </body>
 </html>
+```
