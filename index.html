@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,57 +35,6 @@
             gap: 12px;
             align-items: center;
         }
-        /* Three-dots language menu */
-        .lang-menu-container {
-            position: relative;
-        }
-        .lang-trigger {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(4px);
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.2s;
-            color: #1e3c2c;
-        }
-        body.dark-mode .lang-trigger { background: #1e293b; color: #d4af37; }
-        .lang-trigger:hover { transform: scale(1.05); background: #d4af37; color: white; }
-        .lang-dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 24px;
-            padding: 8px 0;
-            min-width: 130px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 1100;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        body.dark-mode .lang-dropdown { background: #1e293b; border: 1px solid #334155; }
-        .lang-dropdown.active { display: flex; }
-        .lang-dropdown button {
-            background: none;
-            border: none;
-            padding: 12px 20px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            color: #1e293b;
-            cursor: pointer;
-        }
-        body.dark-mode .lang-dropdown button { color: #e2e8f0; }
-        .lang-dropdown button:hover { background: #d4af37; color: #1e293b; }
         
         .search-container {
             background: rgba(255,255,255,0.95);
@@ -116,6 +65,63 @@
             cursor: pointer;
             border: none;
         }
+        
+        /* Globe language icon - appears only on home page */
+        .globe-lang-container {
+            position: relative;
+            display: none;
+        }
+        .globe-lang-container.active {
+            display: block;
+        }
+        .globe-icon {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(4px);
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            color: #1e3c2c;
+        }
+        body.dark-mode .globe-icon { background: #1e293b; color: #d4af37; }
+        .globe-icon:hover { transform: scale(1.05); background: #d4af37; color: white; }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            padding: 8px 0;
+            min-width: 140px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1100;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        body.dark-mode .lang-dropdown { background: #1e293b; border: 1px solid #334155; }
+        .lang-dropdown.active { display: flex; }
+        .lang-dropdown button {
+            background: none;
+            border: none;
+            padding: 10px 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        body.dark-mode .lang-dropdown button { color: #e2e8f0; }
+        .lang-dropdown button:hover { background: #d4af37; color: #1e293b; }
         
         /* Mobile menu */
         .hamburger-btn {
@@ -154,7 +160,7 @@
         body.dark-mode .sidebar a { color: #e2e8f0; }
         .sidebar a:hover, .sidebar a.active { background: #d4af37; color: #1e293b; transform: translateX(6px); }
         
-        /* COMPRESSED SLIDER - fits screen, reduced height */
+        /* Compressed slider - fits screen */
         .hero {
             position: relative;
             width: 100%;
@@ -276,18 +282,18 @@
 <body>
 
 <div class="top-bar">
-    <!-- Three-dots language menu -->
-    <div class="lang-menu-container">
-        <button class="lang-trigger" id="langMenuBtn"><i class="fas fa-ellipsis-vertical"></i></button>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
+        <button id="searchBtn"><i class="fas fa-search"></i></button>
+    </div>
+    <!-- Globe language icon (visible only on home page) -->
+    <div class="globe-lang-container" id="globeLangContainer">
+        <button class="globe-icon" id="globeIconBtn"><i class="fas fa-globe"></i></button>
         <div class="lang-dropdown" id="langDropdown">
             <button data-lang="en">🇬🇧 English</button>
             <button data-lang="sw">🇹🇿 Kiswahili</button>
             <button data-lang="zh">🇨🇳 中文</button>
         </div>
-    </div>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
-        <button id="searchBtn"><i class="fas fa-search"></i></button>
     </div>
 </div>
 
@@ -324,29 +330,82 @@
 <div id="editorModal" class="modal"><div class="modal-content" id="editorModalContent"></div></div>
 
 <script>
-    // ==================== PERSISTENT SYSTEM + COMPRESSED SLIDER + 3-DOTS LANGUAGE ====================
+    // ==================== PERSISTENT SYSTEM + FULL LANGUAGE + GLOBE ICON ONLY ON HOME ====================
     let currentSlideIndex = 0;
     let slideInterval;
     let currentSearchTerm = "";
     let isTransitioning = false;
     let currentLang = "en";
 
-    // Translations
+    // Complete translations for ALL text elements
     const translations = {
-        en: { home: "Home", courses: "Courses", documents: "Documents", news: "News", teacherWorks: "Teacher Works", about: "About Us", coreFeatures: "Core Features", ourCourses: "Our Courses", officialDocs: "Official Documents", latestNews: "Latest News", teacherResources: "Teacher Resources", aboutUs: "About Us", contactInfo: "Contact Information", readMore: "Read More", download: "Download" },
-        sw: { home: "Nyumbani", courses: "Kozi", documents: "Nyaraka", news: "Habari", teacherWorks: "Kazi za Walimu", about: "Kuhusu Sisi", coreFeatures: "Vipengele Muhimu", ourCourses: "Kozi Zetu", officialDocs: "Nyaraka Rasmi", latestNews: "Habari za Hivi Punde", teacherResources: "Nyenzo za Walimu", aboutUs: "Kuhusu Sisi", contactInfo: "Mawasiliano", readMore: "Soma Zaidi", download: "Pakua" },
-        zh: { home: "首页", courses: "课程", documents: "文件", news: "新闻", teacherWorks: "教师作品", about: "关于我们", coreFeatures: "核心功能", ourCourses: "我们的课程", officialDocs: "官方文件", latestNews: "最新消息", teacherResources: "教师资源", aboutUs: "关于我们", contactInfo: "联系方式", readMore: "了解更多", download: "下载" }
+        en: {
+            home: "Home", courses: "Courses", documents: "Documents", news: "News",
+            teacherWorks: "Teacher Works", about: "About Us", coreFeatures: "Core Features",
+            ourCourses: "Our Courses", officialDocs: "Official Documents", latestNews: "Latest News",
+            teacherResources: "Teacher Resources", aboutUs: "About Us", contactInfo: "Contact Information",
+            readMore: "Read More", download: "Download", heroTitle: "Sino-Africa Youth Foundation",
+            heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
+            feature1Title: "Gamified Learning", feature1Desc: "Earn badges and certificates as you complete courses.",
+            feature2Title: "Events & Workshops", feature2Desc: "Regular cultural exchanges and leadership camps.",
+            feature3Title: "AI Career Assistant", feature3Desc: "24/7 guidance for job and scholarship applications.",
+            course1Title: "CHINESE LANGUAGE FOR BEGINNERS", course1Desc: "Learn Chinese to secure Sino-African opportunities.",
+            course2Title: "AI FOUNDATION", course2Desc: "AI experts training tomorrow's leaders.",
+            aboutText: "Sino-Africa Youth Foundation is a non-profit organization dedicated to fostering youth development, cultural exchange, and sustainable cooperation between China and African nations.",
+            contactAddr1: "P.O.BOX 3718, Shangani", contactAddr2: "Office : SH/UZ/163/J, Tomondo, Western Region",
+            contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
+        },
+        sw: {
+            home: "Nyumbani", courses: "Kozi", documents: "Nyaraka", news: "Habari",
+            teacherWorks: "Kazi za Walimu", about: "Kuhusu Sisi", coreFeatures: "Vipengele Muhimu",
+            ourCourses: "Kozi Zetu", officialDocs: "Nyaraka Rasmi", latestNews: "Habari za Hivi Punde",
+            teacherResources: "Nyenzo za Walimu", aboutUs: "Kuhusu Sisi", contactInfo: "Mawasiliano",
+            readMore: "Soma Zaidi", download: "Pakua", heroTitle: "Sino-Africa Youth Foundation",
+            heroDesc: "Kuwawezesha vijana kupitia ujuzi, utamaduni, na maendeleo endelevu. Makao Zanzibar.",
+            feature1Title: "Kujifunza kwa Michezo", feature1Desc: "Pata beji na cheti unapokamilisha kozi.",
+            feature2Title: "Matukio na Warsha", feature2Desc: "Mabadilishano ya kitamaduni na kambi za uongozi.",
+            feature3Title: "Msaidizi wa Kazi wa AI", feature3Desc: "Mwongozo wa 24/7 kwa fursa za kazi na udhamini.",
+            course1Title: "LUGHA YA KICHINA KWA WANAOANZA", course1Desc: "Jifunze Kichina kupata fursa za Sino-Afrika.",
+            course2Title: "MSINGI WA AI", course2Desc: "Wataalam wa AI wanaotoa mafunzo kwa viongozi wa kesho.",
+            aboutText: "Sino-Africa Youth Foundation ni shirika lisilo la faida linalojitolea kukuza maendeleo ya vijana, kubadilishana utamaduni, na ushirikiano endelevu kati ya China na mataifa ya Afrika.",
+            contactAddr1: "S.L.P 3718, Shangani", contactAddr2: "Ofisi : SH/UZ/163/J, Tomondo, Mkoa wa Magharibi",
+            contactAddr3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
+        },
+        zh: {
+            home: "首页", courses: "课程", documents: "文件", news: "新闻",
+            teacherWorks: "教师作品", about: "关于我们", coreFeatures: "核心功能",
+            ourCourses: "我们的课程", officialDocs: "官方文件", latestNews: "最新消息",
+            teacherResources: "教师资源", aboutUs: "关于我们", contactInfo: "联系方式",
+            readMore: "了解更多", download: "下载", heroTitle: "中非青年基金会",
+            heroDesc: "通过技能、文化和可持续发展赋能青年。总部位于桑给巴尔。",
+            feature1Title: "游戏化学习", feature1Desc: "完成课程获得徽章和证书。",
+            feature2Title: "活动与工作坊", feature2Desc: "定期文化交流和领导力训练营。",
+            feature3Title: "AI职业助手", feature3Desc: "24/7为工作和奖学金申请提供指导。",
+            course1Title: "中文入门", course1Desc: "学习中文，抓住中非合作机遇。",
+            course2Title: "人工智能基础", course2Desc: "AI专家培训未来的领导者。",
+            aboutText: "中非青年基金会是一个非营利组织，致力于促进青年发展、文化交流以及中国与非洲国家之间的可持续合作。",
+            contactAddr1: "邮政信箱 3718, Shangani", contactAddr2: "办公室：SH/UZ/163/J, Tomondo, 西部地区",
+            contactAddr3: "坦桑尼亚桑给巴尔", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
+        }
     };
 
     function setLanguage(lang) {
         currentLang = lang;
+        // Update all i18n elements
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (translations[lang][key]) el.innerText = translations[lang][key];
         });
-        renderWebsite(); // re-render dynamic text labels inside cards
+        // Update dynamic content that uses translations
+        updateDynamicContent();
+        // Update hero title and description
+        foundationData.heroTitle = translations[lang].heroTitle;
+        foundationData.heroDesc = translations[lang].heroDesc;
+        renderHeroSlider(); // re-render slider with translated text
+        renderWebsite(); // full re-render for all cards
         document.getElementById('langDropdown').classList.remove('active');
-        showToast(`Language: ${lang.toUpperCase()}`);
+        showToast(translations[lang].readMore ? `Language: ${lang.toUpperCase()}` : `Language: ${lang.toUpperCase()}`);
+        saveData();
     }
 
     function showToast(msg, isErr=false) {
@@ -357,11 +416,17 @@
     }
 
     function loadData() {
-        const saved = localStorage.getItem("saf_compressed_v9");
-        if (saved) foundationData = JSON.parse(saved);
-        else saveData();
+        const saved = localStorage.getItem("saf_globe_v10");
+        if (saved) {
+            foundationData = JSON.parse(saved);
+        } else {
+            // Initialize with translations for hero
+            foundationData.heroTitle = translations[currentLang].heroTitle;
+            foundationData.heroDesc = translations[currentLang].heroDesc;
+            saveData();
+        }
     }
-    function saveData() { localStorage.setItem("saf_compressed_v9", JSON.stringify(foundationData)); }
+    function saveData() { localStorage.setItem("saf_globe_v10", JSON.stringify(foundationData)); }
 
     let foundationData = {
         heroTitle: "Sino-Africa Youth Foundation",
@@ -373,13 +438,13 @@
             { id: "s4", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/Screenshot_2026-04-10-06-56-54-839_com.android.chrome-edit.jpg", caption: "⚙️ SAY on-site training continues" }
         ],
         features: [
-            { id: "f1", icon: "fa-gamepad", title: "Gamified Learning", desc: "Earn badges and certificates as you complete courses." },
-            { id: "f2", icon: "fa-calendar-alt", title: "Events & Workshops", desc: "Regular cultural exchanges and leadership camps." },
-            { id: "f3", icon: "fa-robot", title: "AI Career Assistant", desc: "24/7 guidance for job and scholarship applications." }
+            { id: "f1", icon: "fa-gamepad", titleKey: "feature1Title", descKey: "feature1Desc" },
+            { id: "f2", icon: "fa-calendar-alt", titleKey: "feature2Title", descKey: "feature2Desc" },
+            { id: "f3", icon: "fa-robot", titleKey: "feature3Title", descKey: "feature3Desc" }
         ],
         courses: [
-            { id: "c1", title: "CHINESE LANGUAGE FOR BEGINNERS", description: "Learn Chinese to secure Sino-African opportunities." },
-            { id: "c2", title: "AI FOUNDATION", description: "AI experts training tomorrow's leaders." }
+            { id: "c1", titleKey: "course1Title", descKey: "course1Desc" },
+            { id: "c2", titleKey: "course2Title", descKey: "course2Desc" }
         ],
         documents: [
             { id: "d1", title: "Annual Report 2025", description: "Full report on foundation activities.", fileUrl: "#", fileData: "" }
@@ -391,9 +456,34 @@
         teacherWorks: [
             { id: "t1", title: "Mr Ame - Documentation", type: "link", content: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/README.md", caption: "📄 View Mr Ame's resources & guide", fileData: "" }
         ],
-        aboutText: "Sino-Africa Youth Foundation is a non-profit organization dedicated to fostering youth development, cultural exchange, and sustainable cooperation between China and African nations.",
-        contact: { addressLine1: "P.O.BOX 3718, Shangani", addressLine2: "Office : SH/UZ/163/J, Tomondo, Western Region", addressLine3: "Zanzibar, Tanzania", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389" }
+        aboutTextKey: "aboutText",
+        contact: {
+            addr1Key: "contactAddr1", addr2Key: "contactAddr2", addr3Key: "contactAddr3",
+            websiteKey: "website", emailKey: "email", phoneKey: "phone"
+        }
     };
+
+    function updateDynamicContent() {
+        // Update features with translated titles/descs
+        foundationData.features.forEach(f => {
+            f.title = translations[currentLang][f.titleKey];
+            f.desc = translations[currentLang][f.descKey];
+        });
+        // Update courses
+        foundationData.courses.forEach(c => {
+            c.title = translations[currentLang][c.titleKey];
+            c.description = translations[currentLang][c.descKey];
+        });
+        // Update about text
+        foundationData.aboutText = translations[currentLang][foundationData.aboutTextKey];
+        // Update contact
+        foundationData.contact.addressLine1 = translations[currentLang][foundationData.contact.addr1Key];
+        foundationData.contact.addressLine2 = translations[currentLang][foundationData.contact.addr2Key];
+        foundationData.contact.addressLine3 = translations[currentLang][foundationData.contact.addr3Key];
+        foundationData.contact.website = translations[currentLang][foundationData.contact.websiteKey];
+        foundationData.contact.email = translations[currentLang][foundationData.contact.emailKey];
+        foundationData.contact.phone = translations[currentLang][foundationData.contact.phoneKey];
+    }
 
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
     function highlightText(text) { if (!currentSearchTerm) return escapeHtml(text); const regex = new RegExp(`(${escapeRegex(currentSearchTerm)})`, 'gi'); return escapeHtml(text).replace(regex, '<span class="search-highlight">$1</span>'); }
@@ -422,6 +512,8 @@
 
     function renderWebsite() {
         renderHeroSlider();
+        // Update all cards with translated content
+        updateDynamicContent();
         document.getElementById('featuresGrid').innerHTML = foundationData.features.map(f => `<div class="feature-card"><i class="fas ${f.icon}"></i><h3>${highlightText(f.title)}</h3><p>${highlightText(f.desc)}</p></div>`).join('');
         document.getElementById('coursesContainer').innerHTML = foundationData.courses.map(c => `<div class="course-card"><h3>${highlightText(c.title)}</h3><p>${highlightText(c.description)}</p></div>`).join('');
         document.getElementById('documentsContainer').innerHTML = foundationData.documents.map(d => `<div class="document-card"><h3><i class="fas fa-file-pdf"></i> ${highlightText(d.title)}</h3><p>${highlightText(d.description)}</p>${d.fileData && d.fileData !== '#' ? `<a class="download-link" onclick="openLink('${d.fileData}')">📥 ${translations[currentLang].download}</a>` : d.fileUrl !== '#' ? `<a class="download-link" onclick="openLink('${d.fileUrl}')">🔗 View</a>` : '<span>No file</span>'}</div>`).join('');
@@ -434,7 +526,21 @@
 
     function performSearch() { currentSearchTerm = document.getElementById('searchInput').value.trim(); renderWebsite(); if(currentSearchTerm){ let found = false; const all = [...foundationData.courses, ...foundationData.news, ...foundationData.documents, ...foundationData.teacherWorks, ...foundationData.features]; if(all.some(i=>i.title?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.description?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.content?.toLowerCase().includes(currentSearchTerm.toLowerCase()))) found=true; if(!found) alert("No results found for: " + currentSearchTerm); } }
     
-    function switchTab(tabId) { document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active-page')); document.getElementById(`${tabId}-page`).classList.add('active-page'); document.querySelectorAll('.sidebar .nav-tab').forEach(t=>t.classList.remove('active')); document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active'); closeSidebar(); }
+    function switchTab(tabId) { 
+        document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active-page')); 
+        document.getElementById(`${tabId}-page`).classList.add('active-page'); 
+        document.querySelectorAll('.sidebar .nav-tab').forEach(t=>t.classList.remove('active')); 
+        document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active'); 
+        closeSidebar();
+        
+        // Show/hide globe icon based on active page (only on home)
+        const globeContainer = document.getElementById('globeLangContainer');
+        if (tabId === 'home') {
+            globeContainer.classList.add('active');
+        } else {
+            globeContainer.classList.remove('active');
+        }
+    }
     
     function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
     function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('active'); }
@@ -448,16 +554,19 @@
     document.getElementById('searchInput')?.addEventListener('keypress', e=>{ if(e.key==='Enter') performSearch(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSidebar(); });
     
-    // Three-dots language menu logic
-    const langMenuBtn = document.getElementById('langMenuBtn');
+    // Globe language menu logic
+    const globeIconBtn = document.getElementById('globeIconBtn');
     const langDropdown = document.getElementById('langDropdown');
-    langMenuBtn?.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('active'); });
-    document.addEventListener('click', (e) => { if (!langMenuBtn?.contains(e.target) && !langDropdown?.contains(e.target)) langDropdown?.classList.remove('active'); });
+    globeIconBtn?.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('active'); });
+    document.addEventListener('click', (e) => { if (!globeIconBtn?.contains(e.target) && !langDropdown?.contains(e.target)) langDropdown?.classList.remove('active'); });
     document.querySelectorAll('.lang-dropdown button').forEach(btn => btn.addEventListener('click', (e) => { setLanguage(btn.getAttribute('data-lang')); langDropdown.classList.remove('active'); }));
     
-    loadData(); renderWebsite(); setLanguage('en');
-    // Adjust for any missing image fallback (silent)
-    window.addEventListener('load', () => { if(foundationData.sliderImages.length) renderHeroSlider(); });
+    loadData(); 
+    updateDynamicContent();
+    renderWebsite(); 
+    setLanguage('en');
+    // Ensure globe is visible on home page initially
+    document.getElementById('globeLangContainer').classList.add('active');
 </script>
 </body>
 </html>
