@@ -25,7 +25,7 @@
         body.dark-mode input, body.dark-mode textarea { background: #334155; color: white; border-color: #475569; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         
-        /* Top right controls */
+        /* Top right controls - only visible on home */
         .top-bar {
             position: fixed;
             top: 20px;
@@ -44,6 +44,7 @@
             align-items: center;
             gap: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
         }
         body.dark-mode .search-container { background: #1e293b; }
         .search-container input {
@@ -66,7 +67,7 @@
             border: none;
         }
         
-        /* Globe language icon - appears only on home page */
+        /* Globe language icon - clean, no shadow, no white background */
         .globe-lang-container {
             position: relative;
             display: none;
@@ -75,10 +76,10 @@
             display: block;
         }
         .globe-icon {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(4px);
+            background: transparent !important;
+            backdrop-filter: none;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             cursor: pointer;
             width: 38px;
             height: 38px;
@@ -86,12 +87,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.2s;
             color: #1e3c2c;
+            box-shadow: none !important;
+            background-color: transparent !important;
         }
-        body.dark-mode .globe-icon { background: #1e293b; color: #d4af37; }
-        .globe-icon:hover { transform: scale(1.05); background: #d4af37; color: white; }
+        body.dark-mode .globe-icon { color: #d4af37; background: transparent !important; }
+        .globe-icon:hover { transform: scale(1.08); color: #d4af37; background: transparent !important; }
         
         .lang-dropdown {
             position: absolute;
@@ -123,14 +125,31 @@
         body.dark-mode .lang-dropdown button { color: #e2e8f0; }
         .lang-dropdown button:hover { background: #d4af37; color: #1e293b; }
         
-        /* Mobile menu */
+        /* Mobile menu - only visible on home */
         .hamburger-btn {
-            position: fixed; top: 20px; left: 20px; z-index: 1001;
-            background: #1e3c2c; border: none; font-size: 1.2rem; cursor: pointer;
-            color: white; width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            position: fixed; 
+            top: 20px; 
+            left: 20px; 
+            z-index: 1001;
+            background: #1e3c2c; 
+            border: none; 
+            font-size: 1.2rem; 
+            cursor: pointer;
+            color: white; 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             transition: all 0.2s;
+        }
+        .hamburger-btn.hide-on-other-pages {
+            display: flex;
+        }
+        .hamburger-btn.hidden {
+            display: none !important;
         }
         .hamburger-btn:hover { transform: scale(1.05); background: #d4af37; color: #1e293b; }
         
@@ -160,7 +179,7 @@
         body.dark-mode .sidebar a { color: #e2e8f0; }
         .sidebar a:hover, .sidebar a.active { background: #d4af37; color: #1e293b; transform: translateX(6px); }
         
-        /* Compressed slider - fits screen */
+        /* Compressed slider */
         .hero {
             position: relative;
             width: 100%;
@@ -281,12 +300,12 @@
 </head>
 <body>
 
-<div class="top-bar">
-    <div class="search-container">
+<div class="top-bar" id="topBar">
+    <div class="search-container" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
         <button id="searchBtn"><i class="fas fa-search"></i></button>
     </div>
-    <!-- Globe language icon (visible only on home page) -->
+    <!-- Globe language icon - clean, no shadow, no white background -->
     <div class="globe-lang-container" id="globeLangContainer">
         <button class="globe-icon" id="globeIconBtn"><i class="fas fa-globe"></i></button>
         <div class="lang-dropdown" id="langDropdown">
@@ -330,7 +349,7 @@
 <div id="editorModal" class="modal"><div class="modal-content" id="editorModalContent"></div></div>
 
 <script>
-    // ==================== PERSISTENT SYSTEM + FULL LANGUAGE + GLOBE ICON ONLY ON HOME ====================
+    // ==================== PERSISTENT SYSTEM + FULL LANGUAGE + CONTROLS ONLY ON HOME ====================
     let currentSlideIndex = 0;
     let slideInterval;
     let currentSearchTerm = "";
@@ -379,194 +398,4 @@
             readMore: "了解更多", download: "下载", heroTitle: "中非青年基金会",
             heroDesc: "通过技能、文化和可持续发展赋能青年。总部位于桑给巴尔。",
             feature1Title: "游戏化学习", feature1Desc: "完成课程获得徽章和证书。",
-            feature2Title: "活动与工作坊", feature2Desc: "定期文化交流和领导力训练营。",
-            feature3Title: "AI职业助手", feature3Desc: "24/7为工作和奖学金申请提供指导。",
-            course1Title: "中文入门", course1Desc: "学习中文，抓住中非合作机遇。",
-            course2Title: "人工智能基础", course2Desc: "AI专家培训未来的领导者。",
-            aboutText: "中非青年基金会是一个非营利组织，致力于促进青年发展、文化交流以及中国与非洲国家之间的可持续合作。",
-            contactAddr1: "邮政信箱 3718, Shangani", contactAddr2: "办公室：SH/UZ/163/J, Tomondo, 西部地区",
-            contactAddr3: "坦桑尼亚桑给巴尔", website: "https://www.say.ngo", email: "volunteer@say.ngo", phone: "+255318389"
-        }
-    };
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        // Update all i18n elements
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) el.innerText = translations[lang][key];
-        });
-        // Update dynamic content that uses translations
-        updateDynamicContent();
-        // Update hero title and description
-        foundationData.heroTitle = translations[lang].heroTitle;
-        foundationData.heroDesc = translations[lang].heroDesc;
-        renderHeroSlider(); // re-render slider with translated text
-        renderWebsite(); // full re-render for all cards
-        document.getElementById('langDropdown').classList.remove('active');
-        showToast(translations[lang].readMore ? `Language: ${lang.toUpperCase()}` : `Language: ${lang.toUpperCase()}`);
-        saveData();
-    }
-
-    function showToast(msg, isErr=false) {
-        const toast = document.createElement('div'); toast.className = 'toast-notification';
-        toast.style.background = isErr ? '#b91c1c' : '#1e3c2c';
-        toast.innerText = msg; document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
-    }
-
-    function loadData() {
-        const saved = localStorage.getItem("saf_globe_v10");
-        if (saved) {
-            foundationData = JSON.parse(saved);
-        } else {
-            // Initialize with translations for hero
-            foundationData.heroTitle = translations[currentLang].heroTitle;
-            foundationData.heroDesc = translations[currentLang].heroDesc;
-            saveData();
-        }
-    }
-    function saveData() { localStorage.setItem("saf_globe_v10", JSON.stringify(foundationData)); }
-
-    let foundationData = {
-        heroTitle: "Sino-Africa Youth Foundation",
-        heroDesc: "Empowering youth through skills, culture, and sustainable development. Based in Zanzibar.",
-        sliderImages: [
-            { id: "s1", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0008.jpg", caption: "📚 SAY LIBRARY" },
-            { id: "s2", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0009.jpg", caption: "🏫 SAY TRAINING CENTER" },
-            { id: "s3", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/IMG-20260406-WA0011.jpg", caption: "🎓 SAY seed teachers on zoom with Prof Li" },
-            { id: "s4", url: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/Screenshot_2026-04-10-06-56-54-839_com.android.chrome-edit.jpg", caption: "⚙️ SAY on-site training continues" }
-        ],
-        features: [
-            { id: "f1", icon: "fa-gamepad", titleKey: "feature1Title", descKey: "feature1Desc" },
-            { id: "f2", icon: "fa-calendar-alt", titleKey: "feature2Title", descKey: "feature2Desc" },
-            { id: "f3", icon: "fa-robot", titleKey: "feature3Title", descKey: "feature3Desc" }
-        ],
-        courses: [
-            { id: "c1", titleKey: "course1Title", descKey: "course1Desc" },
-            { id: "c2", titleKey: "course2Title", descKey: "course2Desc" }
-        ],
-        documents: [
-            { id: "d1", title: "Annual Report 2025", description: "Full report on foundation activities.", fileUrl: "#", fileData: "" }
-        ],
-        news: [
-            { id: "n1", title: "New Partnership with UNESCO", content: "Global education initiative launched.", date: "2026-03-15" },
-            { id: "n2", title: "Scholarship Applications Open", content: "Apply now for the 2026 cohort.", date: "2026-04-01" }
-        ],
-        teacherWorks: [
-            { id: "t1", title: "Mr Ame - Documentation", type: "link", content: "https://raw.githubusercontent.com/ameral320-ai/SAY12/1dc08307353675b16fc6fc371f8284e22416f202/README.md", caption: "📄 View Mr Ame's resources & guide", fileData: "" }
-        ],
-        aboutTextKey: "aboutText",
-        contact: {
-            addr1Key: "contactAddr1", addr2Key: "contactAddr2", addr3Key: "contactAddr3",
-            websiteKey: "website", emailKey: "email", phoneKey: "phone"
-        }
-    };
-
-    function updateDynamicContent() {
-        // Update features with translated titles/descs
-        foundationData.features.forEach(f => {
-            f.title = translations[currentLang][f.titleKey];
-            f.desc = translations[currentLang][f.descKey];
-        });
-        // Update courses
-        foundationData.courses.forEach(c => {
-            c.title = translations[currentLang][c.titleKey];
-            c.description = translations[currentLang][c.descKey];
-        });
-        // Update about text
-        foundationData.aboutText = translations[currentLang][foundationData.aboutTextKey];
-        // Update contact
-        foundationData.contact.addressLine1 = translations[currentLang][foundationData.contact.addr1Key];
-        foundationData.contact.addressLine2 = translations[currentLang][foundationData.contact.addr2Key];
-        foundationData.contact.addressLine3 = translations[currentLang][foundationData.contact.addr3Key];
-        foundationData.contact.website = translations[currentLang][foundationData.contact.websiteKey];
-        foundationData.contact.email = translations[currentLang][foundationData.contact.emailKey];
-        foundationData.contact.phone = translations[currentLang][foundationData.contact.phoneKey];
-    }
-
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
-    function highlightText(text) { if (!currentSearchTerm) return escapeHtml(text); const regex = new RegExp(`(${escapeRegex(currentSearchTerm)})`, 'gi'); return escapeHtml(text).replace(regex, '<span class="search-highlight">$1</span>'); }
-    function escapeRegex(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-
-    function renderHeroSlider() {
-        const container = document.getElementById('sliderContainer');
-        if (!container) return;
-        container.innerHTML = '';
-        if (foundationData.sliderImages.length === 0) { container.innerHTML = `<div class="no-slider-message"><h2>📸 Slides will appear here</h2></div>`; return; }
-        foundationData.sliderImages.forEach((img, idx) => {
-            const slide = document.createElement('div'); slide.className = 'slide';
-            if (idx === 0) slide.classList.add('active');
-            slide.style.backgroundImage = `url('${img.url}')`;
-            slide.style.backgroundSize = 'cover';
-            slide.style.backgroundPosition = 'center 30%';
-            slide.innerHTML = `<div class="slide-overlay"><h1>${escapeHtml(foundationData.heroTitle)}</h1><p>${escapeHtml(foundationData.heroDesc)}</p></div><div class="slide-caption"><i class="fas fa-camera"></i> ${escapeHtml(img.caption)}</div>`;
-            container.appendChild(slide);
-        });
-        startSlider();
-    }
-    
-    function startSlider() { if (slideInterval) clearInterval(slideInterval); if (foundationData.sliderImages.length <= 1) return; slideInterval = setInterval(() => { if (isTransitioning) return; isTransitioning = true; const slides = document.querySelectorAll('.slide'); if (slides.length === 0) return; const current = slides[currentSlideIndex]; current.classList.add('exit-right'); current.classList.remove('active'); const nextIdx = (currentSlideIndex + 1) % slides.length; const next = slides[nextIdx]; next.classList.add('enter-left'); setTimeout(() => { next.classList.remove('enter-left'); next.classList.add('active'); current.classList.remove('exit-right'); isTransitioning = false; currentSlideIndex = nextIdx; }, 550); }, 5000); }
-    
-    function openLink(url) { if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer'); else showToast("Link unavailable", true); }
-
-    function renderWebsite() {
-        renderHeroSlider();
-        // Update all cards with translated content
-        updateDynamicContent();
-        document.getElementById('featuresGrid').innerHTML = foundationData.features.map(f => `<div class="feature-card"><i class="fas ${f.icon}"></i><h3>${highlightText(f.title)}</h3><p>${highlightText(f.desc)}</p></div>`).join('');
-        document.getElementById('coursesContainer').innerHTML = foundationData.courses.map(c => `<div class="course-card"><h3>${highlightText(c.title)}</h3><p>${highlightText(c.description)}</p></div>`).join('');
-        document.getElementById('documentsContainer').innerHTML = foundationData.documents.map(d => `<div class="document-card"><h3><i class="fas fa-file-pdf"></i> ${highlightText(d.title)}</h3><p>${highlightText(d.description)}</p>${d.fileData && d.fileData !== '#' ? `<a class="download-link" onclick="openLink('${d.fileData}')">📥 ${translations[currentLang].download}</a>` : d.fileUrl !== '#' ? `<a class="download-link" onclick="openLink('${d.fileUrl}')">🔗 View</a>` : '<span>No file</span>'}</div>`).join('');
-        document.getElementById('newsContainer').innerHTML = foundationData.news.map(n => `<div class="news-card"><div class="news-header"><h3>${highlightText(n.title)}</h3><svg class="seven-star" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,53 79,85 50,67 21,85 32,53 5,35 39,35" fill="red"/></svg></div><small>${n.date}</small><p>${highlightText(n.content)}</p></div>`).join('');
-        document.getElementById('teachersContainer').innerHTML = foundationData.teacherWorks.map(item => `<div class="teacher-card"><h3>📚 ${highlightText(item.title)}</h3><p><strong>${item.type}</strong></p><p>${highlightText(item.caption)}</p><a class="file-link" onclick="openLink('${item.content}')"><i class="fas fa-external-link-alt"></i> ${translations[currentLang].readMore}</a></div>`).join('');
-        document.getElementById('aboutContent').innerHTML = `<p>${highlightText(foundationData.aboutText)}</p>`;
-        document.getElementById('contactDetails').innerHTML = `<p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(foundationData.contact.addressLine1)}<br>${escapeHtml(foundationData.contact.addressLine2)}<br>${escapeHtml(foundationData.contact.addressLine3)}</p><p><i class="fas fa-globe"></i> <a href="${foundationData.contact.website}" target="_blank">${foundationData.contact.website}</a></p><p><i class="fas fa-envelope"></i> <a href="mailto:${foundationData.contact.email}">${foundationData.contact.email}</a></p><p><i class="fas fa-phone-alt"></i> ${foundationData.contact.phone}</p>`;
-        saveData();
-    }
-
-    function performSearch() { currentSearchTerm = document.getElementById('searchInput').value.trim(); renderWebsite(); if(currentSearchTerm){ let found = false; const all = [...foundationData.courses, ...foundationData.news, ...foundationData.documents, ...foundationData.teacherWorks, ...foundationData.features]; if(all.some(i=>i.title?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.description?.toLowerCase().includes(currentSearchTerm.toLowerCase()) || i.content?.toLowerCase().includes(currentSearchTerm.toLowerCase()))) found=true; if(!found) alert("No results found for: " + currentSearchTerm); } }
-    
-    function switchTab(tabId) { 
-        document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active-page')); 
-        document.getElementById(`${tabId}-page`).classList.add('active-page'); 
-        document.querySelectorAll('.sidebar .nav-tab').forEach(t=>t.classList.remove('active')); 
-        document.querySelector(`.sidebar .nav-tab[data-tab="${tabId}"]`)?.classList.add('active'); 
-        closeSidebar();
-        
-        // Show/hide globe icon based on active page (only on home)
-        const globeContainer = document.getElementById('globeLangContainer');
-        if (tabId === 'home') {
-            globeContainer.classList.add('active');
-        } else {
-            globeContainer.classList.remove('active');
-        }
-    }
-    
-    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
-    function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('active'); }
-    
-    // Event listeners
-    document.getElementById('hamburgerBtn')?.addEventListener('click', openSidebar);
-    document.getElementById('closeSidebar')?.addEventListener('click', closeSidebar);
-    document.getElementById('sidebarOverlay')?.addEventListener('click', closeSidebar);
-    document.querySelectorAll('.sidebar .nav-tab').forEach(tab=>tab.addEventListener('click', ()=>{ switchTab(tab.getAttribute('data-tab')); }));
-    document.getElementById('searchBtn')?.addEventListener('click', performSearch);
-    document.getElementById('searchInput')?.addEventListener('keypress', e=>{ if(e.key==='Enter') performSearch(); });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSidebar(); });
-    
-    // Globe language menu logic
-    const globeIconBtn = document.getElementById('globeIconBtn');
-    const langDropdown = document.getElementById('langDropdown');
-    globeIconBtn?.addEventListener('click', (e) => { e.stopPropagation(); langDropdown.classList.toggle('active'); });
-    document.addEventListener('click', (e) => { if (!globeIconBtn?.contains(e.target) && !langDropdown?.contains(e.target)) langDropdown?.classList.remove('active'); });
-    document.querySelectorAll('.lang-dropdown button').forEach(btn => btn.addEventListener('click', (e) => { setLanguage(btn.getAttribute('data-lang')); langDropdown.classList.remove('active'); }));
-    
-    loadData(); 
-    updateDynamicContent();
-    renderWebsite(); 
-    setLanguage('en');
-    // Ensure globe is visible on home page initially
-    document.getElementById('globeLangContainer').classList.add('active');
-</script>
-</body>
-</html>
+            feature2Titl
